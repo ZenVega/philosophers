@@ -18,6 +18,7 @@ int	init_state(char **argv, t_state *state)
 	state->time_to_die = ft_atoi(argv[2]);
 	state->time_to_eat = ft_atoi(argv[3]);
 	state->time_to_sleep = ft_atoi(argv[4]);
+	state->phil_id = 0;
 	if (argv[5])
 		state->n_meals = ft_atoi(argv[5]);
 	else

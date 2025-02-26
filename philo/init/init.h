@@ -10,7 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../utils/utils.h"
+#ifndef INIT_H
+# define INIT_H
+
+# include "../utils/utils.h"
 
 typedef struct s_state {
 	int	n_phils;
@@ -18,6 +21,9 @@ typedef struct s_state {
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	n_meals;
+	int	phil_id;
 }	t_state;
 
 int	init_state(char **argv, t_state *state);
+
+#endif

@@ -9,6 +9,7 @@
 /*   Updated: 2025/02/26 13:53:09 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "utils.h"
 
 int	ft_atoi(const char *nptr)
 {
@@ -32,4 +33,11 @@ int	ft_atoi(const char *nptr)
 		nptr++;
 	}
 	return (result * neg);
+}
+
+int	on_error(int err)
+{
+	errno = err;
+	printf("Error: %s\n", strerror(errno));
+	return (errno);
 }
