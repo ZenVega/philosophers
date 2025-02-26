@@ -6,7 +6,7 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:12:07 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/26 14:01:53 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:30:39 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,7 @@
 #include <unistd.h>
 #include "init/init.h"
 #include "utils/utils.h"
-
-void	*create_philo(void *data)
-{
-	t_state	*state;
-	int		id;
-
-	state = (t_state *)data;
-	id = state->phil_id++;
-	printf("I'm philly no: %d\n", id);
-	return (0);
-}
+#include "philosopher/philosopher.h"
 
 int	main(int argc, char **argv)
 {
