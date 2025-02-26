@@ -30,7 +30,7 @@ clean:
 	find $(SRC_FOLDER) -name "*.o" -delete
 
 fclean:	clean
-	rm -f $(NAME)
+	rm -f $(NAME)/$(NAME)
 
 test: $(NAME)
 	philo/philo 5 4 3 2
