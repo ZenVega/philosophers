@@ -6,7 +6,7 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:04:49 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/26 16:17:57 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:29:29 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	*create_philo(void *data)
 
 	state = (t_state *)data;
 	id = state->phil_id++;
+	printf("ID: %lu\n", pthread_self());
 	log_action(id, INIT);
 	return (0);
 }
