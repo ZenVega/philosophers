@@ -6,11 +6,12 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:04:49 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 17:07:38 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:20:54 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
+#include <signal.h>
 
 static t_phil	init_phil(t_prog *prog, int id)
 {
@@ -36,10 +37,10 @@ static void	grab_fork(t_phil *phil)
 	int				fork_1_grabbed;
 	int				fork_2_grabbed;
 
-	fork_1_grabbed = pthread_mutex_lock(&phil->fork_1);
-	if (!fork_1_grabbed)
-		fork_2_grabbed = pthread_mutex_lock(&phil->fork_2);
-	if (fork_2_grabbed)
+	fork_1_grabbed = !pthread_mutex_lock(&phil->fork_1);
+	if (fork_1_grabbed)
+		fork_2_grabbed = !pthread_mutex_lock(&phil->fork_2);
+	if (!fork_2_grabbed)
 		pthread_mutex_unlock(&phil->fork_1);
 	else
 	{
@@ -84,7 +85,7 @@ void	*create_phil(void *data)
 	pthread_mutex_lock(&prog->init_lock);
 	id = prog->phil_id++;
 	prog->phils[id] = init_phil(prog, id);
-	phil = &prog->phils[prog->phil_id];
+	phil = &prog->phils[id];
 	while (phil->alive)
 	{
 		if (phil->status == THINK)
