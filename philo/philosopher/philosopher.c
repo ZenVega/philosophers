@@ -6,17 +6,17 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:04:49 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 16:27:52 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:07:38 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-static t_phil	init_phil(t_prog *prog)
+static t_phil	init_phil(t_prog *prog, int id)
 {
 	t_phil	phil;
 
-	phil.id = prog->phil_id++;
+	phil.id = id;
 	phil.last_meal = prog->time_to_die;
 	phil.status = THINK;
 	phil.meals = 0;
@@ -78,12 +78,13 @@ void	*create_phil(void *data)
 {
 	t_prog		*prog;
 	t_phil		*phil;
+	int			id;
 
 	prog = (t_prog *)data;
 	pthread_mutex_lock(&prog->init_lock);
-	prog->phils[prog->phil_id] = init_phil(prog);
+	id = prog->phil_id++;
+	prog->phils[id] = init_phil(prog, id);
 	phil = &prog->phils[prog->phil_id];
-	pthread_mutex_unlock(&prog->init_lock);
 	while (phil->alive)
 	{
 		if (phil->status == THINK)
@@ -99,5 +100,6 @@ void	*create_phil(void *data)
 		}
 	}
 	log_action(phil->id, DEAD);
+	pthread_mutex_unlock(&prog->init_lock);
 	return (NULL);
 }

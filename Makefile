@@ -35,10 +35,10 @@ fclean:	clean
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test: $(NAME)
-	philo/philo 5 100 10 10 20
+	philo/philo 5 100 1000 1000 20
 
 debug: $(NAME)
-	gdb --args philo/philo 5 100 10 10 20
+	gdb --args philo/philo 5 100 1000 1000 20
 
 re: fclean all
 
