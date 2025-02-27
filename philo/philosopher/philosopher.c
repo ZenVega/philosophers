@@ -6,28 +6,32 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:04:49 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 12:30:03 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:27:52 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-static void	init_phil(t_phil *phil, t_state *state)
+static t_phil	init_phil(t_prog *prog)
 {
-	phil->id = state->phil_id++;
-	phil->last_meal = state->time_to_die;
-	phil->status = THINK;
-	phil->fork_1 = state->forks[phil->id];
-	if (phil->id >= state->n_phils)
-		phil->fork_2 = state->forks[0];
+	t_phil	phil;
+
+	phil.id = prog->phil_id++;
+	phil.last_meal = prog->time_to_die;
+	phil.status = THINK;
+	phil.meals = 0;
+	phil.fork_1 = prog->forks[phil.id];
+	if (phil.id >= prog->n_phils)
+		phil.fork_2 = prog->forks[0];
 	else
-		phil->fork_2 = state->forks[phil->id + 1];
+		phil.fork_2 = prog->forks[phil.id + 1];
 	printf("ID: %lu\n", pthread_self());
-	log_action(phil->id, INIT);
-	phil->alive = 1;
+	log_action(phil.id, INIT);
+	phil.alive = 1;
+	return (phil);
 }
 
-static void	grab_fork(int n_phils, pthread_mutex_t *forks, t_phil *phil)
+static void	grab_fork(t_phil *phil)
 {
 	int				fork_1_grabbed;
 	int				fork_2_grabbed;
@@ -40,6 +44,7 @@ static void	grab_fork(int n_phils, pthread_mutex_t *forks, t_phil *phil)
 	else
 	{
 		phil->status = EAT;
+		phil->meals++;
 		log_action(phil->id, phil->status);
 		phil->last_meal = get_time();
 	}
@@ -71,20 +76,28 @@ static void	wake_up(t_phil *phil, int time_to_sleep)
 
 void	*create_phil(void *data)
 {
-	t_state		*state;
-	t_phil		phil;
+	t_prog		*prog;
+	t_phil		*phil;
 
-	state = (t_state *)data;
-	init_phil(&phil, state);
-	while (phil.alive)
+	prog = (t_prog *)data;
+	pthread_mutex_lock(&prog->init_lock);
+	prog->phils[prog->phil_id] = init_phil(prog);
+	phil = &prog->phils[prog->phil_id];
+	pthread_mutex_unlock(&prog->init_lock);
+	while (phil->alive)
 	{
-		if (phil.status == THINK)
-			grab_fork(state->n_phils, state->forks, &phil);
-		else if (phil.status == EAT)
-			finish_meal(&phil, state->time_to_eat);
-		else if (phil.status == SLEEP)
-			wake_up(&phil, state->time_to_sleep);
+		if (phil->status == THINK)
+			grab_fork(phil);
+		else if (phil->status == EAT)
+			finish_meal(phil, prog->time_to_eat);
+		else if (phil->status == SLEEP)
+			wake_up(phil, prog->time_to_sleep);
+		if (prog->n_meals && (&prog->phils[prog->n_phils-1] != NULL) && all_eaten(prog))
+		{
+			printf("Everyone Lives\n");
+			return (NULL);
+		}
 	}
-	log_action(phil.id, DEAD);
-	return (0);
+	log_action(phil->id, DEAD);
+	return (NULL);
 }

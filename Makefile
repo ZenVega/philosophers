@@ -5,6 +5,7 @@ CFILES		= \
 			$(SRC_FOLDER)/utils/utils.c\
 			$(SRC_FOLDER)/init/init.c\
 			$(SRC_FOLDER)/philosopher/philosopher.c\
+			$(SRC_FOLDER)/philosopher/utils.c\
 
 OFILES 		= $(CFILES:.c=.o)
 
@@ -32,11 +33,12 @@ clean:
 fclean:	clean
 	rm -f $(NAME)/$(NAME)
 
+# ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test: $(NAME)
-	philo/philo 5 4 3 2
+	philo/philo 5 100 10 10 20
 
 debug: $(NAME)
-	gdb --args philo/philo 5 4 3 2
+	gdb --args philo/philo 5 100 10 10 20
 
 re: fclean all
 

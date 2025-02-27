@@ -6,39 +6,34 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:12:07 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 11:55:30 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:25:27 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "init/init.h"
 #include "utils/utils.h"
 #include "philosopher/philosopher.h"
 
 int	main(int argc, char **argv)
 {
-	static t_state		state;
+	static t_prog		prog;
 	int					err;
 	int					i;
 
 	if (argc < 5 || argc > 6)
-		return (on_error(EINVAL));
-	err = init_state(argv, &state);
+		return (on_error(EINVAL, prog));
+	err = init_prog(argv, &prog);
 	if (err)
-		return (on_error(err));
-	err = init_thread_ids(state.n_phils, &state.tids);
+		return (on_error(err, prog));
+	err = init_threads(prog.n_phils, &prog.tids, &prog.phils);
+	err = init_forks(prog.n_phils, &prog.forks, &prog.init_lock);
 	if (err)
-		return (on_error(err));
+		return (on_error(err, prog));
 	i = 0;
-	while (i < state.n_phils)
-		pthread_create(&state.tids[i++], NULL, create_phil, &state);
+	while (i < prog.n_phils)
+		pthread_create(&prog.tids[i++], NULL, create_phil, &prog);
 	i = 0;
-	while (i < state.n_phils)
-		pthread_join(state.tids[i++], NULL);
-	pthread_exit(NULL);
-	free(state.tids);
-	i = 0;
-	while (i < state.n_phils)
-		pthread_mutex_destroy(&state.forks[i]);
-	free(state.forks);
+	while (i < prog.n_phils)
+		pthread_join(prog.tids[i++], NULL);
+	clean_up(prog);
 }
