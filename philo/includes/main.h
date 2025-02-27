@@ -17,12 +17,13 @@
 # include <pthread.h>
 
 typedef struct s_state {
-	int			n_phils;
-	pthread_t	*tids;
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
-	int			n_meals;
-	int			phil_id;
+	int				n_phils;
+	pthread_t		*tids;
+	pthread_mutex_t	*forks;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				n_meals;
+	int				phil_id;
 }	t_state;
 #endif

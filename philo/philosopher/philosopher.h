@@ -6,7 +6,7 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:05:07 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/26 16:27:25 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:24:34 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHER_H
@@ -26,5 +26,17 @@ typedef enum e_action {
 	DEAD = 5,
 }	t_action;
 
-void	*create_philo(void *data);
+typedef struct s_phil {
+	int				id;
+	int				alive;
+	t_action		status;
+	int				last_meal;
+	int				last_nap;
+	pthread_mutex_t	fork_1;
+	pthread_mutex_t	fork_2;
+}	t_phil;
+
+void	*create_phil(void *data);
+int		get_time(void);
+void	log_action(int phil_id, t_action act_id);
 #endif

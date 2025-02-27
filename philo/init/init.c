@@ -26,7 +26,7 @@ int	init_state(char **argv, t_state *state)
 	return (0);
 }
 
-int	get_thread_ids(int n_phils, pthread_t **tid)
+int	init_thread_ids(int n_phils, pthread_t **tid)
 {
 	*tid = (pthread_t *)malloc(sizeof(pthread_t) * n_phils);
 	if (!(*tid))
@@ -34,7 +34,10 @@ int	get_thread_ids(int n_phils, pthread_t **tid)
 	return (0);
 }
 
-int	init_forks(int philos)
+int	init_forks(int n_phils, pthread_mutex_t **forks)
 {
-	return (philos);
+	*forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n_phils);
+	if (!(*forks))
+		return (errno);
+	return (0);
 }

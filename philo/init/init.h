@@ -18,8 +18,8 @@
 # include "../includes/main.h"
 # include "../utils/utils.h"
 
-int	get_thread_ids(int n_phils, pthread_t **tid);
+int	init_thread_ids(int n_phils, pthread_t **tid);
 int	init_state(char **argv, t_state *state);
-int	init_forks(int philos);
+int	init_forks(int philos, pthread_mutex_t **forks);
 
 #endif
