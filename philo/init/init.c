@@ -25,3 +25,16 @@ int	init_state(char **argv, t_state *state)
 		state->n_meals = 0;
 	return (0);
 }
+
+int	get_thread_ids(int n_phils, pthread_t **tid)
+{
+	*tid = (pthread_t *)malloc(sizeof(pthread_t) * n_phils);
+	if (!(*tid))
+		return (errno);
+	return (0);
+}
+
+int	init_forks(int philos)
+{
+	return (philos);
+}

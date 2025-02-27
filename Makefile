@@ -35,6 +35,9 @@ fclean:	clean
 test: $(NAME)
 	philo/philo 5 4 3 2
 
+debug: $(NAME)
+	gdb --args philo/philo 5 4 3 2
+
 re: fclean all
 
 .PHONY: all clean fclean re

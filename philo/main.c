@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <pthread.h>
 #include <unistd.h>
 #include "init/init.h"
 #include "utils/utils.h"
@@ -18,7 +17,6 @@
 
 int	main(int argc, char **argv)
 {
-	pthread_t			tid;
 	static t_state		state;
 	int					err;
 	int					i;
@@ -28,11 +26,13 @@ int	main(int argc, char **argv)
 	err = init_state(argv, &state);
 	if (err)
 		return (on_error(err));
+	err = get_thread_ids(state.n_phils, &state.tids);
 	i = 0;
-	while (i++ < state.n_phils)
-	{
-		pthread_create(&tid, NULL, create_philo, &state);
-		pthread_join(tid, NULL);
-	}
-	pthread_exit(NULL); 
+	while (i < state.n_phils)
+		pthread_create(&state.tids[i++], NULL, create_philo, &state);
+	i = 0;
+	while (i < state.n_phils)
+		pthread_join(state.tids[i++], NULL);
+	pthread_exit(NULL);
+	free(state.tids);
 }
