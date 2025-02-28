@@ -19,7 +19,12 @@ static t_phil	init_phil(t_prog *prog, int id)
 
 	phil.id = id;
 	phil.last_meal = prog->time_to_die;
-	phil.status = THINK;
+	if (!phil.id % 3)
+		phil.status = THINK;
+	else if (!phil.id % 2)
+		phil.status = EAT;
+	else
+		phil.status = SLEEP;
 	phil.meals = 0;
 	phil.fork_1 = prog->forks[phil.id];
 	if (phil.id >= prog->n_phils)
@@ -69,10 +74,23 @@ static void	wake_up(t_phil *phil, int time_to_sleep)
 	{
 		pthread_mutex_unlock(&phil->fork_1);
 		pthread_mutex_unlock(&phil->fork_2);
-		phil->status = SLEEP;
+		phil->status = THINK;
 		log_action(phil->id, phil->status);
 		phil->last_nap = get_time();
 	}
+}
+
+int	is_dead(t_phil *phil, int time_to_die)
+{
+	int	time;
+
+	time = get_time();
+	if (time - phil->last_meal > time_to_die)
+	{
+		phil->alive = 0;
+		return (1);
+	}
+	return (0);
 }
 
 void	*create_phil(void *data)
@@ -80,14 +98,20 @@ void	*create_phil(void *data)
 	t_prog		*prog;
 	t_phil		*phil;
 	int			id;
-
+	int			i;
+//TODO: Move outside of thread
+//TODO: Surveillance shoould be another thread
+//TODO: data should only be the id
 	prog = (t_prog *)data;
 	pthread_mutex_lock(&prog->init_lock);
 	id = prog->phil_id++;
 	prog->phils[id] = init_phil(prog, id);
 	phil = &prog->phils[id];
+	pthread_mutex_unlock(&prog->init_lock);
 	while (phil->alive)
 	{
+		if (is_dead(phil, prog->time_to_die))
+			break ;
 		if (phil->status == THINK)
 			grab_fork(phil);
 		else if (phil->status == EAT)
@@ -99,8 +123,11 @@ void	*create_phil(void *data)
 			printf("Everyone Lives\n");
 			return (NULL);
 		}
+		i = 0;
+		while (i < prog->n_phils)
+			if (!prog->phils[i++].alive)
+				break ;
 	}
 	log_action(phil->id, DEAD);
-	pthread_mutex_unlock(&prog->init_lock);
 	return (NULL);
 }

@@ -17,7 +17,7 @@ int	get_time(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (tv.tv_usec * 1000);
+	return (tv.tv_usec / 1000);
 }
 
 int	all_eaten(t_prog *prog)
