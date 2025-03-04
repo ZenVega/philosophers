@@ -13,30 +13,6 @@
 #include "philosopher.h"
 #include <signal.h>
 
-static t_phil	init_phil(t_prog *prog, int id)
-{
-	t_phil	phil;
-
-	phil.id = id;
-	phil.last_meal = prog->time_to_die;
-	if (!phil.id % 3)
-		phil.status = THINK;
-	else if (!phil.id % 2)
-		phil.status = EAT;
-	else
-		phil.status = SLEEP;
-	phil.meals = 0;
-	phil.fork_1 = prog->forks[phil.id];
-	if (phil.id >= prog->n_phils)
-		phil.fork_2 = prog->forks[0];
-	else
-		phil.fork_2 = prog->forks[phil.id + 1];
-	printf("ID: %lu\n", pthread_self());
-	log_action(phil.id, INIT);
-	phil.alive = 1;
-	return (phil);
-}
-
 static void	grab_fork(t_phil *phil)
 {
 	int				fork_1_grabbed;
@@ -99,13 +75,11 @@ void	*create_phil(void *data)
 	t_phil		*phil;
 	int			id;
 	int			i;
-//TODO: Move outside of thread
 //TODO: Surveillance shoould be another thread
 //TODO: data should only be the id
 	prog = (t_prog *)data;
 	pthread_mutex_lock(&prog->init_lock);
 	id = prog->phil_id++;
-	prog->phils[id] = init_phil(prog, id);
 	phil = &prog->phils[id];
 	pthread_mutex_unlock(&prog->init_lock);
 	while (phil->alive)

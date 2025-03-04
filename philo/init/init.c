@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/constants.h"
+#include "../philosopher/philosopher.h"
 #include "init.h"
 
 int	init_prog(char **argv, t_prog *prog)
@@ -27,12 +28,12 @@ int	init_prog(char **argv, t_prog *prog)
 	return (0);
 }
 
-int	init_threads(int n_phils, pthread_t **tid, t_phil **phils)
+int	init_threads(int n_phils, pthread_t **tid, t_prog *prog)
 {
 	*tid = (pthread_t *)malloc(sizeof(pthread_t) * n_phils);
 	if (!(*tid))
 		return (errno);
-	*phils = (t_phil *)malloc(sizeof(t_phil) * n_phils);
+	prog->phils = (t_phil *)malloc(sizeof(t_phil) * n_phils);
 	if (!(*tid))
 	{
 		free(*tid);
@@ -53,4 +54,33 @@ int	init_forks(int n_phils, pthread_mutex_t **forks, pthread_mutex_t *init_lock)
 		return (errno);
 	}
 	return (0);
+}
+
+void	init_phils(t_prog *prog)
+{
+	t_phil	phil;
+	int		i;
+
+	i = -1;
+	while (i++ < prog->n_phils)
+	{
+		phil.id = i;
+		phil.last_meal = prog->time_to_die;
+		if (!phil.id % 3)
+			phil.status = THINK;
+		else if (!phil.id % 2)
+			phil.status = EAT;
+		else
+			phil.status = SLEEP;
+		phil.meals = 0;
+		phil.fork_1 = prog->forks[phil.id];
+		if (phil.id >= prog->n_phils)
+			phil.fork_2 = prog->forks[0];
+		else
+			phil.fork_2 = prog->forks[phil.id + 1];
+		printf("ID: %lu\n", pthread_self());
+		log_action(phil.id, INIT);
+		phil.alive = 1;
+		prog->phils[i] = phil;
+	}
 }

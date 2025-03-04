@@ -25,13 +25,16 @@ int	main(int argc, char **argv)
 	err = init_prog(argv, &prog);
 	if (err)
 		return (on_error(err, prog));
-	err = init_threads(prog.n_phils, &prog.tids, &prog.phils);
+	err = init_threads(prog.n_phils, &prog.tids, &prog);
+	if (err)
+		return (on_error(err, prog));
 	err = init_forks(prog.n_phils, &prog.forks, &prog.init_lock);
 	if (err)
 		return (on_error(err, prog));
+	init_phils(&prog);
 	i = 0;
 	while (i < prog.n_phils)
-		pthread_create(&prog.tids[i++], NULL, create_phil, &prog);
+		pthread_create(&prog.tids[i], NULL, create_phil, &prog);
 	i = 0;
 	while (i < prog.n_phils)
 		pthread_join(prog.tids[i++], NULL);
