@@ -6,6 +6,7 @@ CFILES		= \
 			$(SRC_FOLDER)/init/init.c\
 			$(SRC_FOLDER)/philosopher/philosopher.c\
 			$(SRC_FOLDER)/philosopher/utils.c\
+			$(SRC_FOLDER)/supervision/supervision.c\
 
 OFILES 		= $(CFILES:.c=.o)
 

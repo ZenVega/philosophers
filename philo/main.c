@@ -6,19 +6,18 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:12:07 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 16:25:27 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:23:15 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "init/init.h"
-#include "utils/utils.h"
-#include "philosopher/philosopher.h"
+#include "includes/main.h"
 
 int	main(int argc, char **argv)
 {
 	static t_prog		prog;
 	int					err;
 	int					i;
+	pthread_t			super_id;
 
 	if (argc < 5 || argc > 6)
 		return (on_error(EINVAL, prog));
@@ -32,11 +31,16 @@ int	main(int argc, char **argv)
 	if (err)
 		return (on_error(err, prog));
 	init_phils(&prog);
+	pthread_create(&super_id, NULL, start_supervision, &prog);
 	i = 0;
 	while (i < prog.n_phils)
-		pthread_create(&prog.tids[i], NULL, create_phil, &prog);
+	{
+		pthread_create(&prog.tids[i++], NULL, create_phil, &prog);
+		usleep(5000);
+	}
 	i = 0;
 	while (i < prog.n_phils)
 		pthread_join(prog.tids[i++], NULL);
+	pthread_join(super_id, NULL);
 	clean_up(prog);
 }

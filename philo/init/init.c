@@ -6,12 +6,10 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:35:32 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 16:32:15 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:01:03 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/constants.h"
-#include "../philosopher/philosopher.h"
 #include "init.h"
 
 int	init_prog(char **argv, t_prog *prog)
@@ -62,25 +60,19 @@ void	init_phils(t_prog *prog)
 	int		i;
 
 	i = -1;
-	while (i++ < prog->n_phils)
+	while (i++ < prog->n_phils - 1)
 	{
 		phil.id = i;
-		phil.last_meal = prog->time_to_die;
-		if (!phil.id % 3)
-			phil.status = THINK;
-		else if (!phil.id % 2)
-			phil.status = EAT;
-		else
-			phil.status = SLEEP;
+		phil.status = THINK;
 		phil.meals = 0;
 		phil.fork_1 = prog->forks[phil.id];
 		if (phil.id >= prog->n_phils)
 			phil.fork_2 = prog->forks[0];
 		else
 			phil.fork_2 = prog->forks[phil.id + 1];
-		printf("ID: %lu\n", pthread_self());
 		log_action(phil.id, INIT);
 		phil.alive = 1;
 		prog->phils[i] = phil;
 	}
+	prog->running = 1;
 }

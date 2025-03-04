@@ -6,7 +6,7 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:53:07 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 16:26:08 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:49:04 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "utils.h"
@@ -57,3 +57,12 @@ void	clean_up(t_prog prog)
 		pthread_mutex_destroy(&prog.forks[i]);
 	free(prog.forks);
 }
+
+int	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+

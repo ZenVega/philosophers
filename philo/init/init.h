@@ -6,7 +6,7 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:35:12 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/02/27 16:27:24 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/03/04 12:38:50 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include "../includes/constants.h"
 # include "../utils/utils.h"
+# include "../philosopher/philosopher.h"
 
 int		init_threads(int n_phils, pthread_t **tid, t_prog *prog);
 int		init_prog(char **argv, t_prog *prog);
