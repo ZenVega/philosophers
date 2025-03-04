@@ -39,7 +39,7 @@ test: $(NAME)
 	philo/philo 5 1000 100 100 20
 
 debug: $(NAME)
-	gdb --args philo/philo 5 1000 100 100 20
+	gdb --args philo/philo 1 1000 100 100 20
 
 re: fclean all
 

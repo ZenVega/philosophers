@@ -19,6 +19,7 @@ int	init_prog(char **argv, t_prog *prog)
 	prog->time_to_eat = ft_atoi(argv[3]);
 	prog->time_to_sleep = ft_atoi(argv[4]);
 	prog->phil_id = 0;
+	prog->running = 1;
 	if (argv[5])
 		prog->n_meals = ft_atoi(argv[5]);
 	else
@@ -74,5 +75,4 @@ void	init_phils(t_prog *prog)
 		phil.alive = 1;
 		prog->phils[i] = phil;
 	}
-	prog->running = 1;
 }

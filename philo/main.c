@@ -31,13 +31,13 @@ int	main(int argc, char **argv)
 	if (err)
 		return (on_error(err, prog));
 	init_phils(&prog);
-	pthread_create(&super_id, NULL, start_supervision, &prog);
 	i = 0;
 	while (i < prog.n_phils)
 	{
 		pthread_create(&prog.tids[i++], NULL, create_phil, &prog);
-		usleep(5000);
+		usleep(1000);
 	}
+	pthread_create(&super_id, NULL, start_supervision, &prog);
 	i = 0;
 	while (i < prog.n_phils)
 		pthread_join(prog.tids[i++], NULL);

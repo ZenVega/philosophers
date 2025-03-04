@@ -62,6 +62,7 @@ void	*create_phil(void *data)
 	pthread_mutex_lock(&prog->init_lock);
 	id = prog->phil_id++;
 	phil = &prog->phils[id];
+	phil->last_meal = get_time();
 	pthread_mutex_unlock(&prog->init_lock);
 	while (prog->running && phil->alive)
 	{
@@ -73,10 +74,7 @@ void	*create_phil(void *data)
 			wake_up(phil, prog->time_to_sleep);
 	}
 	if (!phil->alive)
-	{
-		log_action(phil->id, DEAD);
-		prog->running = 0;
-	}
+		log_action(id, DEAD);
 	pthread_detach(pthread_self());
 	return (NULL);
 }
