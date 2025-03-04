@@ -12,6 +12,7 @@
 
 #include "includes/main.h"
 
+//TODO: How to implement a rotating system?
 int	main(int argc, char **argv)
 {
 	static t_prog		prog;

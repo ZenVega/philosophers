@@ -14,6 +14,7 @@
 
 static void	grab_fork(t_phil *phil)
 {
+	//TODO: phils share forks, why?
 	if (phil->id % 2 == 0)
 	{
 		pthread_mutex_lock(&phil->fork_1);
