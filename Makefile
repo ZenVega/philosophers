@@ -1,11 +1,12 @@
 SRC_FOLDER	= philo/
+NP = 5
 
 CFILES		= \
 			$(SRC_FOLDER)/main.c\
 			$(SRC_FOLDER)/utils/utils.c\
 			$(SRC_FOLDER)/init/init.c\
 			$(SRC_FOLDER)/philosopher/philosopher.c\
-			$(SRC_FOLDER)/philosopher/utils.c\
+			$(SRC_FOLDER)/philosopher/phil_utils.c\
 			$(SRC_FOLDER)/supervision/supervision.c\
 
 OFILES 		= $(CFILES:.c=.o)
@@ -15,7 +16,7 @@ DEPS		= \
 			  includes/constants.h
 CC			= gcc
 
-CFLAGS		= -g -Wall -Wextra -Werror
+CFLAGS		= -g -Wall -Wextra -Werror -pthread
 
 NAME		= philo
 
@@ -36,10 +37,10 @@ fclean:	clean
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test: $(NAME)
-	philo/philo 5 1000 100 100 20
+	philo/philo $(NP) 1000 100 100 20
 
 debug: $(NAME)
-	gdb --args philo/philo 1 1000 100 100 20
+	gdb --args philo/philo $(NP) 1000 100 100 20
 
 re: fclean all
 

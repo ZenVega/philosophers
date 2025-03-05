@@ -14,17 +14,8 @@
 
 static void	grab_fork(t_phil *phil)
 {
-	//TODO: phils share forks, why?
-	if (phil->id % 2 == 0)
-	{
-		pthread_mutex_lock(&phil->fork_1);
-		pthread_mutex_lock(&phil->fork_2);
-	}
-	else
-	{
-		pthread_mutex_lock(&phil->fork_2);
-		pthread_mutex_lock(&phil->fork_1);
-	}
+	pthread_mutex_lock(&phil->fork_1);
+	pthread_mutex_lock(&phil->fork_2);
 	phil->status = EAT;
 	phil->meals++;
 	log_action(phil->id, phil->status);
@@ -53,6 +44,7 @@ static void	wake_up(t_phil *phil, int time_to_sleep)
 	}
 }
 
+//TODO: Dying phil doesn't close thread
 void	*create_phil(void *data)
 {
 	t_prog		*prog;
@@ -63,8 +55,10 @@ void	*create_phil(void *data)
 	pthread_mutex_lock(&prog->init_lock);
 	id = prog->phil_id++;
 	phil = &prog->phils[id];
-	phil->last_meal = get_time();
 	pthread_mutex_unlock(&prog->init_lock);
+	phil->last_meal = get_time();
+	phil->last_nap = get_time();
+	printf("THREAD %d STARTED\n", id);
 	while (prog->running && phil->alive)
 	{
 		while (prog->running && phil->status == THINK)
@@ -76,6 +70,6 @@ void	*create_phil(void *data)
 	}
 	if (!phil->alive)
 		log_action(id, DEAD);
-	pthread_detach(pthread_self());
+	printf("THREAD %d CLOSED\n", id);
 	return (NULL);
 }

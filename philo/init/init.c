@@ -15,6 +15,8 @@
 int	init_prog(char **argv, t_prog *prog)
 {
 	prog->n_phils = ft_atoi(argv[1]);
+	if (prog->n_phils < 2)
+		return (EINVAL);
 	prog->time_to_die = ft_atoi(argv[2]);
 	prog->time_to_eat = ft_atoi(argv[3]);
 	prog->time_to_sleep = ft_atoi(argv[4]);
@@ -60,19 +62,23 @@ void	init_phils(t_prog *prog)
 	t_phil	phil;
 	int		i;
 
-	i = -1;
-	while (i++ < prog->n_phils - 1)
+	i = 0;
+	while (i < prog->n_phils)
 	{
 		phil.id = i;
-		phil.status = THINK;
+		if (!(i % 2))
+			phil.status = THINK;
+		else
+			phil.status = SLEEP;
 		phil.meals = 0;
 		phil.fork_1 = prog->forks[phil.id];
 		if (phil.id >= prog->n_phils)
-			phil.fork_2 = prog->forks[0];
+			phil.fork_1 = prog->forks[0];
 		else
 			phil.fork_2 = prog->forks[phil.id + 1];
 		log_action(phil.id, INIT);
 		phil.alive = 1;
 		prog->phils[i] = phil;
+		i++;
 	}
 }

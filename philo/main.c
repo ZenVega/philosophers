@@ -34,14 +34,12 @@ int	main(int argc, char **argv)
 	init_phils(&prog);
 	i = 0;
 	while (i < prog.n_phils)
-	{
 		pthread_create(&prog.tids[i++], NULL, create_phil, &prog);
-		usleep(1000);
-	}
 	pthread_create(&super_id, NULL, start_supervision, &prog);
 	i = 0;
+	pthread_join(super_id, NULL);
 	while (i < prog.n_phils)
 		pthread_join(prog.tids[i++], NULL);
-	pthread_join(super_id, NULL);
 	clean_up(prog);
+	return (0);
 }

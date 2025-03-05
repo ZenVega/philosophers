@@ -24,10 +24,10 @@ static int	all_alive(t_phil *phils, int n_phils, int time_to_die)
 		if (phils[i].last_meal != 0 && time - phils[i].last_meal > time_to_die)
 		{
 			phils[i].alive = 0;
-			return (0);
+			return (i);
 		}
 	}
-	return (1);
+	return (0);
 }
 
 static int	still_eating(t_phil *phils, int n_phils, int n_meals)
@@ -47,13 +47,15 @@ static int	still_eating(t_phil *phils, int n_phils, int n_meals)
 void	*start_supervision(void *data)
 {
 	t_prog	*prog;
+	int		died;
 
 	prog = (t_prog *)data;
 	while (prog->running)
 	{
-		if (!all_alive(prog->phils, prog->n_phils, prog->time_to_die))
+		died = all_alive(prog->phils, prog->n_phils, prog->time_to_die); 
+		if (died)
 		{
-			printf("Philosopher died!\n");
+			printf("Philosopher %d died!\n", died);
 			prog->running = 0;
 			break ;
 		}

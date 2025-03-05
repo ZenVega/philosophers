@@ -15,6 +15,7 @@
 # include "../includes/constants.h"
 # include "../utils/utils.h"
 # include <stdio.h>
+# include <unistd.h>
 # include <pthread.h>
 
 void	*create_phil(void *data);
