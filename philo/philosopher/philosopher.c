@@ -50,15 +50,21 @@ void	*create_phil(void *data)
 	t_prog		*prog;
 	t_phil		*phil;
 	int			id;
+	int			offset;
 
 	prog = (t_prog *)data;
 	pthread_mutex_lock(&prog->init_lock);
 	id = prog->phil_id++;
 	phil = &prog->phils[id];
 	pthread_mutex_unlock(&prog->init_lock);
+	offset = 0;
+	if (id % 2)
+		offset = prog->time_to_eat; 
+	usleep(offset);
 	phil->last_meal = get_time();
 	phil->last_nap = get_time();
-	printf("THREAD %d STARTED\n", id);
+	phil->born = 1;
+	printf("THREAD %d STARTED @ %u\n", id, get_time());
 	while (prog->running && phil->alive)
 	{
 		while (prog->running && phil->status == THINK)

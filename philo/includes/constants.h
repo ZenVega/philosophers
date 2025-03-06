@@ -27,6 +27,7 @@ typedef enum e_action {
 typedef struct s_phil {
 	int				id;
 	int				alive;
+	int				born;
 	t_action		status;
 	int				last_meal;
 	int				last_nap;

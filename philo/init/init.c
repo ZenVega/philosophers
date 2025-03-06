@@ -66,18 +66,16 @@ void	init_phils(t_prog *prog)
 	while (i < prog->n_phils)
 	{
 		phil.id = i;
-		if (!(i % 2))
-			phil.status = THINK;
-		else
-			phil.status = SLEEP;
+		phil.status = THINK;
 		phil.meals = 0;
 		phil.fork_1 = prog->forks[phil.id];
-		if (phil.id >= prog->n_phils)
+		if (phil.id == prog->n_phils - 1)
 			phil.fork_1 = prog->forks[0];
 		else
 			phil.fork_2 = prog->forks[phil.id + 1];
 		log_action(phil.id, INIT);
 		phil.alive = 1;
+		phil.born = 0;
 		prog->phils[i] = phil;
 		i++;
 	}
