@@ -64,7 +64,7 @@ void	*start_supervision(void *data)
 			&& &prog->phils[prog->n_phils - 1] != (NULL)
 			&& !still_eating(prog->phils, prog->n_phils, prog->n_meals))
 		{
-			printf("Everyone Lives\n");
+			printf("Everyone had %d meals and lives\n", prog->n_meals);
 			prog->running = 0;
 			break ;
 		}

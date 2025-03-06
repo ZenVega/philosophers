@@ -1,5 +1,9 @@
 SRC_FOLDER	= philo/
-NP = 5
+NP = 5		#num_of_phils
+NM = 30		#num_of_meals
+TE = 30		#time_to_eat
+TD = 60		#time_to_die
+TS = 20		#time_to_sleep
 
 CFILES		= \
 			$(SRC_FOLDER)/main.c\
@@ -37,10 +41,10 @@ fclean:	clean
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test: $(NAME)
-	philo/philo $(NP) 1000 100 100 20
+	$(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)
 
 debug: $(NAME)
-	gdb --args philo/philo $(NP) 1000 100 100 20
+	gdb --args $(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)
 
 re: fclean all
 
