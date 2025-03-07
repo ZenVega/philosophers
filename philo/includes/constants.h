@@ -24,6 +24,15 @@ typedef enum e_action {
 	DEAD = 5,
 }	t_action;
 
+typedef enum e_app_state {
+	BEFORE_INIT = 0,
+	PROG_INIT = 1,
+	THREAD_INIT = 2,
+	FORK_INIT = 3,
+	PHIL_INIT = 4,
+	SUPER_INIT = 5,
+}	t_app_state;
+
 typedef struct s_phil {
 	int				id;
 	int				alive;

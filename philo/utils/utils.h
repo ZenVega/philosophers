@@ -19,8 +19,9 @@
 # include "../includes/constants.h"
 
 int		ft_atoi(const char *nptr);
-int		on_error(int err, t_prog state);
-void	clean_up(t_prog state);
+int		on_error(int err, t_prog prog, t_app_state state);
+void	clean_up(t_prog prog, t_app_state state);
 int		get_time(void);
+int		is_arg_valid(char **argv);
 
 #endif

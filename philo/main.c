@@ -20,17 +20,17 @@ int	main(int argc, char **argv)
 	int					i;
 	pthread_t			super_id;
 
-	if (argc < 5 || argc > 6)
-		return (on_error(EINVAL, prog));
+	if (argc < 5 || argc > 6 || !is_arg_valid(argv))
+		return (on_error(EINVAL, prog, BEFORE_INIT));
 	err = init_prog(argv, &prog);
 	if (err)
-		return (on_error(err, prog));
+		return (on_error(err, prog, BEFORE_INIT));
 	err = init_threads(prog.n_phils, &prog.tids, &prog);
 	if (err)
-		return (on_error(err, prog));
+		return (on_error(err, prog, PROG_INIT));
 	err = init_forks(prog.n_phils, &prog.forks, &prog.init_lock);
 	if (err)
-		return (on_error(err, prog));
+		return (on_error(err, prog, THREAD_INIT));
 	init_phils(&prog);
 	i = 0;
 	while (i < prog.n_phils)
@@ -40,6 +40,6 @@ int	main(int argc, char **argv)
 	pthread_join(super_id, NULL);
 	while (i < prog.n_phils)
 		pthread_join(prog.tids[i++], NULL);
-	clean_up(prog);
+	clean_up(prog, SUPER_INIT);
 	return (0);
 }

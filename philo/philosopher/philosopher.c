@@ -44,6 +44,7 @@ static void	wake_up(t_phil *phil, int time_to_sleep)
 	}
 }
 
+//TODO: Replace condition with usleep
 //TODO: Dying phil doesn't close thread
 void	*create_phil(void *data)
 {

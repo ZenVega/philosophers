@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "init.h"
-
+//TODO: Validate Inputs
 int	init_prog(char **argv, t_prog *prog)
 {
 	prog->n_phils = ft_atoi(argv[1]);

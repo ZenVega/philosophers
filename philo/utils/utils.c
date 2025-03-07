@@ -36,26 +36,31 @@ int	ft_atoi(const char *nptr)
 	return (result * neg);
 }
 
-int	on_error(int err, t_prog prog)
+int	on_error(int err, t_prog prog, t_app_state state)
 {
 	errno = err;
-	clean_up(prog);
+	clean_up(prog, state);
 	printf("Error: %s\n", strerror(errno));
 	return (errno);
 }
 
-void	clean_up(t_prog prog)
+//TODO: Add clean_up states
+void	clean_up(t_prog prog, t_app_state state)
 {
 	int	i;
 
 	i = 0;
-	pthread_exit(NULL);
+	if (state < PROG_INIT)
+		return ;
 	free(prog.tids);
+	if (state < THREAD_INIT)
+		return ;
 	free(prog.phils);
 	i = 0;
 	while (i < prog.n_phils)
 		pthread_mutex_destroy(&prog.forks[i]);
 	free(prog.forks);
+	pthread_exit(NULL);
 }
 
 int	get_time(void)
@@ -66,3 +71,24 @@ int	get_time(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
+int	is_arg_valid(char **argv)
+{
+	int		i;
+	char	*argv_curr;
+
+	i = 0;
+	argv++;
+	while (*argv)
+	{
+		argv_curr = *argv;
+		while (argv_curr[i])
+		{
+			if (!(argv_curr[i] >= '0' && argv_curr[i] <= '9'))
+				return (0);
+			i++;
+		}
+		argv++;
+		i = 0;
+	}
+	return (1);
+}
