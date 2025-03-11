@@ -58,16 +58,18 @@ void	clean_up(t_prog prog, t_app_state state)
 	free(prog.phils);
 	i = 0;
 	while (i < prog.n_phils)
-		pthread_mutex_destroy(&prog.forks[i]);
+		pthread_mutex_destroy(prog.forks[i++]);
 	free(prog.forks);
+	pthread_mutex_destroy(prog.init_lock);
 	pthread_exit(NULL);
 }
 
-int	get_time(void)
+long	get_time(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
+	//printf("TIME: %ld\n", (tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 

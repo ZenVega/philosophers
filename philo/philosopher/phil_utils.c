@@ -22,5 +22,5 @@ void	log_action(int phil_id, t_action act_id)
 	actions[SLEEP] = "is sleeping";
 	actions[THINK] = "is thinking";
 	actions[DEAD] = "died";
-	printf("%d %d %s\n", get_time(), phil_id, actions[act_id]);
+	printf("%ld %d %s\n", get_time(), phil_id, actions[act_id]);
 }

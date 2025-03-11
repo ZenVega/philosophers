@@ -38,8 +38,8 @@ typedef struct s_phil {
 	int				alive;
 	int				born;
 	t_action		status;
-	int				last_meal;
-	int				last_nap;
+	long			last_meal;
+	long			last_nap;
 	pthread_mutex_t	fork_1;
 	pthread_mutex_t	fork_2;
 	int				meals;
@@ -48,8 +48,8 @@ typedef struct s_phil {
 typedef struct s_prog {
 	int				n_phils;
 	pthread_t		*tids;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	init_lock;
+	pthread_mutex_t	**forks;
+	pthread_mutex_t	*init_lock;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;

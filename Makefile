@@ -20,17 +20,21 @@ DEPS		= \
 			  includes/constants.h
 CC			= gcc
 
-CFLAGS		= -g -Wall -Wextra -Werror -pthread
+CFLAGS		= -g -Wall -Wextra -Werror -pthread 
+
+SANITIZER = -fsanitize=address
+
+SANITIZER_OFF = 
 
 NAME		= philo
 
 all: $(NAME) 
 
 $(NAME): $(OFILES)
-	$(CC) $(CFLAGS) -o $(SRC_FOLDER)$(NAME) $(OFILES)
+	$(CC) $(CFLAGS) $(SANITIZER_OFF) -o $(SRC_FOLDER)$(NAME) $(OFILES)
 
 %.o: %.c $(DEPS)
-	$(CC) $(CFLAGS) -I/usr/include -g -c $< -o $@
+	$(CC) $(CFLAGS) $(SANITIZER_OFF) -I/usr/include -g -c $< -o $@
 
 clean:
 	rm -f $(OFILES)

@@ -43,17 +43,26 @@ int	init_threads(int n_phils, pthread_t **tid, t_prog *prog)
 	return (0);
 }
 
-int	init_forks(int n_phils, pthread_mutex_t **forks, pthread_mutex_t *init_lock)
+int	init_forks(int n_phils, pthread_mutex_t ***forks, pthread_mutex_t **init_lock)
 {
-	*forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n_phils);
+	int	i;
+
+	i = 0;
+	*forks = (pthread_mutex_t **)malloc(sizeof(pthread_mutex_t *) * n_phils);
 	if (!(*forks))
 		return (errno);
-	init_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!init_lock)
+	while (i < n_phils)
+	{
+		(*forks)[i] = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+		pthread_mutex_init((*forks)[i++], NULL);
+	}
+	*init_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!(*init_lock))
 	{
 		free(forks);
 		return (errno);
 	}
+	pthread_mutex_init(*init_lock, NULL);
 	return (0);
 }
 
@@ -68,11 +77,11 @@ void	init_phils(t_prog *prog)
 		phil.id = i;
 		phil.status = THINK;
 		phil.meals = 0;
-		phil.fork_1 = prog->forks[phil.id];
+		phil.fork_1 = *prog->forks[phil.id];
 		if (phil.id == prog->n_phils - 1)
-			phil.fork_1 = prog->forks[0];
+			phil.fork_1 = *prog->forks[0];
 		else
-			phil.fork_2 = prog->forks[phil.id + 1];
+			phil.fork_2 = *prog->forks[phil.id + 1];
 		log_action(phil.id, INIT);
 		phil.alive = 1;
 		phil.born = 0;
