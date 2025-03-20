@@ -50,12 +50,12 @@ typedef struct s_prog {
 	pthread_t		*tids;
 	pthread_mutex_t	**forks;
 	pthread_mutex_t	*init_lock;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
 	int				n_meals;
 	int				phil_id;
-	t_phil			*phils;
+	t_phil			**phils;
 	int				running;
 }	t_prog;
 #endif
