@@ -14,15 +14,23 @@
 
 static void	grab_fork(t_phil *phil, int time_to_eat)
 {
-	pthread_mutex_lock(&phil->fork_1);
-	log_action(phil->id, FORK);
+	if (phil->id % 2)
+	{
+		pthread_mutex_lock(&phil->fork_1);
+		log_action(phil->id, FORK);
+	}
 	pthread_mutex_lock(&phil->fork_2);
 	log_action(phil->id, FORK);
+	if (!phil->id % 2)
+	{
+		pthread_mutex_lock(&phil->fork_1);
+		log_action(phil->id, FORK);
+	}
 	phil->status = EAT;
 	phil->meals++;
 	log_action(phil->id, phil->status);
 	phil->last_meal = get_time();
-	usleep(time_to_eat);
+	usleep(time_to_eat * 1000);
 }
 
 static void	finish_meal(t_phil *phil, int time_to_sleep)
@@ -32,7 +40,7 @@ static void	finish_meal(t_phil *phil, int time_to_sleep)
 	phil->status = SLEEP;
 	log_action(phil->id, phil->status);
 	phil->last_nap = get_time();
-	usleep(time_to_sleep);
+	usleep(time_to_sleep * 1000);
 }
 
 static void	wake_up(t_phil *phil)

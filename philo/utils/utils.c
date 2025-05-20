@@ -64,12 +64,12 @@ void	clean_up(t_prog prog, t_app_state state)
 	pthread_exit(NULL);
 }
 
+//returns time in milliseconds
 long	get_time(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	//printf("TIME: %ld\n", (tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 

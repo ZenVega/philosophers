@@ -11,23 +11,26 @@
 /* ************************************************************************** */
 
 #include "supervision.h"
-
+//TODO: changed to phils ** needs further refactoring
 static int	all_alive(t_phil **phils, int n_phils, long time_to_die)
 {
 	int		i;
 	long	time;
-	long	time_left;
+	long	time_passed;
 
 	i = -1;
 	while (++i < n_phils)
 	{
 		time = get_time();
-		time_left = time - phils[i]->last_meal;
-		printf("\nPhil: %d\nThe time is %ld\n The last meal was %ld\nThe time since the last meal was %ld\nThe time to die is %ld", phils[i]->id, time, phils[i]->last_meal, time_left, time_to_die);
-		if (phils[i]->born && phils[i]->last_meal != 0 && time - phils[i]->last_meal > time_to_die)
+		time_passed = time - phils[i]->last_meal;
+		printf("\nPhil: %d\nThe time is %ld\n", phils[i]->id, time);
+		printf("The last meal was %ld\n", phils[i]->last_meal);
+		printf("The time since the last meal was %ld\n", time_passed);
+		if (phils[i]->born && time_passed > time_to_die)
 		{
+			printf("\nPhil: %d\n DEAD\n", phils[i]->id);
 			phils[i]->alive = 0;
-			return (i);
+			return (1);
 		}
 	}
 	return (0);

@@ -9,9 +9,10 @@
 /*   Updated: 2025/03/04 14:01:03 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <stdio.h>
 #include "init.h"
 //TODO: Validate Inputs
+//time_to... in milliseconds
 int	init_prog(char **argv, t_prog *prog)
 {
 	prog->n_phils = ft_atoi(argv[1]);
@@ -20,6 +21,7 @@ int	init_prog(char **argv, t_prog *prog)
 	prog->time_to_die = ft_atoi(argv[2]);
 	prog->time_to_eat = ft_atoi(argv[3]);
 	prog->time_to_sleep = ft_atoi(argv[4]);
+	printf("Time to die: %ld\n", prog->time_to_die);
 	prog->phil_id = 0;
 	prog->running = 1;
 	if (argv[5])
@@ -43,7 +45,8 @@ int	init_threads(int n_phils, pthread_t **tid, t_prog *prog)
 	return (0);
 }
 
-int	init_forks(int n_phils, pthread_mutex_t ***forks, pthread_mutex_t **init_lock)
+int	init_forks(int n_phils, pthread_mutex_t ***forks,
+		pthread_mutex_t **init_lock)
 {
 	int	i;
 

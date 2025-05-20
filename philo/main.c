@@ -12,26 +12,34 @@
 
 #include "includes/main.h"
 
+static int	init(int argc, char **argv, t_prog *prog)
+{
+	int					err;
+
+	if (argc < 5 || argc > 6 || !is_arg_valid(argv))
+		return (on_error(EINVAL, *prog, BEFORE_INIT));
+	err = init_prog(argv, prog);
+	if (err)
+		return (on_error(err, *prog, BEFORE_INIT));
+	err = init_threads((*prog).n_phils, &(*prog).tids, prog);
+	if (err)
+		return (on_error(err, *prog, PROG_INIT));
+	err = init_forks((*prog).n_phils, &(*prog).forks, &(*prog).init_lock);
+	if (err)
+		return (on_error(err, *prog, THREAD_INIT));
+	init_phils(prog);
+	return (0);
+}
+
 //TODO: How to implement a rotating system?
 int	main(int argc, char **argv)
 {
 	static t_prog		prog;
-	int					err;
 	int					i;
 	pthread_t			super_id;
 
-	if (argc < 5 || argc > 6 || !is_arg_valid(argv))
-		return (on_error(EINVAL, prog, BEFORE_INIT));
-	err = init_prog(argv, &prog);
-	if (err)
-		return (on_error(err, prog, BEFORE_INIT));
-	err = init_threads(prog.n_phils, &prog.tids, &prog);
-	if (err)
-		return (on_error(err, prog, PROG_INIT));
-	err = init_forks(prog.n_phils, &prog.forks, &prog.init_lock);
-	if (err)
-		return (on_error(err, prog, THREAD_INIT));
-	init_phils(&prog);
+	if (init(argc, argv, &prog))
+		return (-1);
 	i = 0;
 	while (i < prog.n_phils)
 		pthread_create(&prog.tids[i++], NULL, create_phil, &prog);
