@@ -12,41 +12,41 @@
 
 #include "philosopher.h"
 
-static void	grab_fork(t_phil *phil, int time_to_eat)
+static void	grab_fork(t_phil *phil, int time_to_eat, long start)
 {
 	if (phil->id % 2)
 	{
 		pthread_mutex_lock(&phil->fork_1);
-		log_action(phil->id, FORK);
+		log_action(start, phil->id, FORK);
 	}
 	pthread_mutex_lock(&phil->fork_2);
-	log_action(phil->id, FORK);
+	log_action(start, phil->id, FORK);
 	if (!phil->id % 2)
 	{
 		pthread_mutex_lock(&phil->fork_1);
-		log_action(phil->id, FORK);
+		log_action(start, phil->id, FORK);
 	}
 	phil->status = EAT;
 	phil->meals++;
-	log_action(phil->id, phil->status);
+	log_action(start, phil->id, phil->status);
 	phil->last_meal = get_time();
 	usleep(time_to_eat * 1000);
 }
 
-static void	finish_meal(t_phil *phil, int time_to_sleep)
+static void	finish_meal(t_phil *phil, int time_to_sleep, long start)
 {
 	pthread_mutex_unlock(&phil->fork_1);
 	pthread_mutex_unlock(&phil->fork_2);
 	phil->status = SLEEP;
-	log_action(phil->id, phil->status);
+	log_action(start, phil->id, phil->status);
 	phil->last_nap = get_time();
 	usleep(time_to_sleep * 1000);
 }
 
-static void	wake_up(t_phil *phil)
+static void	wake_up(t_phil *phil, long start)
 {
 	phil->status = THINK;
-	log_action(phil->id, phil->status);
+	log_action(start, phil->id, phil->status);
 }
 
 void	*create_phil(void *data)
@@ -71,13 +71,13 @@ void	*create_phil(void *data)
 	while (prog->running && phil->alive)
 	{
 		while (prog->running && phil->status == THINK)
-			grab_fork(phil, prog->time_to_eat);
+			grab_fork(phil, prog->time_to_eat, prog->start_time);
 		while (prog->running && phil->status == EAT)
-			finish_meal(phil, prog->time_to_sleep);
+			finish_meal(phil, prog->time_to_sleep, prog->start_time);
 		while (prog->running && phil->status == SLEEP)
-			wake_up(phil);
+			wake_up(phil, prog->start_time);
 	}
 	if (!phil->alive)
-		log_action(id, DEAD);
+		log_action(prog->start_time, id, DEAD);
 	return (NULL);
 }

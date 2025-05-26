@@ -18,11 +18,13 @@ int	init_prog(char **argv, t_prog *prog)
 	prog->n_phils = ft_atoi(argv[1]);
 	if (prog->n_phils < 2)
 		return (EINVAL);
+	prog->start_time = get_time();
 	prog->time_to_die = ft_atoi(argv[2]);
 	prog->time_to_eat = ft_atoi(argv[3]);
 	prog->time_to_sleep = ft_atoi(argv[4]);
 	prog->phil_id = 0;
 	prog->running = 1;
+	prog->init_lock = NULL;
 	if (argv[5])
 		prog->n_meals = ft_atoi(argv[5]);
 	else
@@ -36,7 +38,7 @@ int	init_threads(int n_phils, pthread_t **tid, t_prog *prog)
 	if (!(*tid))
 		return (errno);
 	prog->phils = (t_phil **)malloc(sizeof(t_phil *) * n_phils);
-	if (!(*tid))
+	if (!(prog->phils))
 	{
 		free(*tid);
 		return (errno);
@@ -82,10 +84,10 @@ void	init_phils(t_prog *prog)
 		phil->meals = 0;
 		phil->fork_1 = *prog->forks[phil->id];
 		if (phil->id == prog->n_phils - 1)
-			phil->fork_1 = *prog->forks[0];
+			phil->fork_2 = *prog->forks[0];
 		else
 			phil->fork_2 = *prog->forks[phil->id + 1];
-		log_action(phil->id, INIT);
+		log_action(prog->start_time, phil->id, INIT);
 		phil->alive = 1;
 		phil->born = 0;
 		prog->phils[i] = phil;

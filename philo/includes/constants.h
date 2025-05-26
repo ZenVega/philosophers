@@ -50,6 +50,7 @@ typedef struct s_prog {
 	pthread_t		*tids;
 	pthread_mutex_t	**forks;
 	pthread_mutex_t	*init_lock;
+	long			start_time;
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;

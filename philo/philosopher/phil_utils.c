@@ -12,7 +12,7 @@
 
 #include "philosopher.h"
 
-void	log_action(int phil_id, t_action act_id)
+void	log_action(long start, int phil_id, t_action act_id)
 {
 	char			*actions[6];
 
@@ -22,5 +22,5 @@ void	log_action(int phil_id, t_action act_id)
 	actions[SLEEP] = "is sleeping";
 	actions[THINK] = "is thinking";
 	actions[DEAD] = "died";
-	printf("%ld %d %s\n", get_time(), phil_id + 1, actions[act_id]);
+	printf("%ld %d %s\n", get_time() - start, phil_id + 1, actions[act_id]);
 }

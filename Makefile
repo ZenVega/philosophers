@@ -26,6 +26,11 @@ SANITIZER = -fsanitize=address
 
 SANITIZER_OFF = 
 
+VALGRIND_FLAGS= \
+				--track-origins=yes
+				--leak-check=full
+				--show-leak-kinds=all
+
 NAME		= philo
 
 all: $(NAME) 
@@ -46,6 +51,9 @@ fclean:	clean
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test: $(NAME)
 	$(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)
+
+val_test: $(NAME)
+	valgrind $(VALGRIND_FLAGS) $(SRC_FOLDER)$(NAME) 5 220 100 100 5
 
 debug: $(NAME)
 	gdb --args $(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)
