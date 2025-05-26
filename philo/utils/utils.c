@@ -44,7 +44,6 @@ int	on_error(int err, t_prog prog, t_app_state state)
 	return (errno);
 }
 
-//TODO: Add clean_up states
 void	clean_up(t_prog prog, t_app_state state)
 {
 	int	i;

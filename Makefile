@@ -1,9 +1,9 @@
 SRC_FOLDER	= philo/
-NP = 5		#num_of_phils
+NP = 60		#num_of_phils
 NM = 30		#num_of_meals
 TE = 30		#time_to_eat
-TD = 60		#time_to_die
-TS = 20		#time_to_sleep
+TD = 65		#time_to_die
+TS = 30		#time_to_sleep
 
 CFILES		= \
 			$(SRC_FOLDER)/main.c\

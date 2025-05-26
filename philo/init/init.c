@@ -21,7 +21,6 @@ int	init_prog(char **argv, t_prog *prog)
 	prog->time_to_die = ft_atoi(argv[2]);
 	prog->time_to_eat = ft_atoi(argv[3]);
 	prog->time_to_sleep = ft_atoi(argv[4]);
-	printf("Time to die: %ld\n", prog->time_to_die);
 	prog->phil_id = 0;
 	prog->running = 1;
 	if (argv[5])

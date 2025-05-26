@@ -31,7 +31,6 @@ static int	init(int argc, char **argv, t_prog *prog)
 	return (0);
 }
 
-//TODO: How to implement a rotating system?
 int	main(int argc, char **argv)
 {
 	static t_prog		prog;

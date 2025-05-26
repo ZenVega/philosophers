@@ -23,9 +23,6 @@ static int	all_alive(t_phil **phils, int n_phils, long time_to_die)
 	{
 		time = get_time();
 		time_passed = time - phils[i]->last_meal;
-		printf("\nPhil: %d\nThe time is %ld\n", phils[i]->id, time);
-		printf("The last meal was %ld\n", phils[i]->last_meal);
-		printf("The time since the last meal was %ld\n", time_passed);
 		if (phils[i]->born && time_passed > time_to_die)
 		{
 			printf("\nPhil: %d\n DEAD\n", phils[i]->id);
@@ -62,7 +59,6 @@ void	*start_supervision(void *data)
 		if (died)
 		{
 			printf("Philosopher %d died!\n", died);
-			printf("Last meal %ld died!\n", prog->phils[died]->last_meal);
 			prog->running = 0;
 			break ;
 		}

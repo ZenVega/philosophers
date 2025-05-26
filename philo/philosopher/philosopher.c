@@ -49,7 +49,6 @@ static void	wake_up(t_phil *phil)
 	log_action(phil->id, phil->status);
 }
 
-//TODO: Dying phil doesn't close thread
 void	*create_phil(void *data)
 {
 	t_prog		*prog;
@@ -69,7 +68,6 @@ void	*create_phil(void *data)
 	phil->last_meal = get_time();
 	phil->last_nap = get_time();
 	phil->born = 1;
-	printf("THREAD %d STARTED @ %ld\n", id, get_time());
 	while (prog->running && phil->alive)
 	{
 		while (prog->running && phil->status == THINK)
@@ -81,6 +79,5 @@ void	*create_phil(void *data)
 	}
 	if (!phil->alive)
 		log_action(id, DEAD);
-	printf("THREAD %d CLOSED\n", id);
 	return (NULL);
 }
