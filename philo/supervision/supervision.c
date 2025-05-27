@@ -11,23 +11,23 @@
 /* ************************************************************************** */
 
 #include "supervision.h"
-//TODO: changed to phils ** needs further refactoring
-static int	all_alive(t_phil **phils, int n_phils, long time_to_die)
+
+static int	all_alive(t_prog *prog)
 {
 	int		i;
 	long	time;
 	long	time_passed;
 
 	i = -1;
-	while (++i < n_phils)
+	while (++i < prog->n_phils)
 	{
 		time = get_time();
-		time_passed = time - phils[i]->last_meal;
-		if (phils[i]->born && time_passed > time_to_die)
+		time_passed = time - prog->phils[i]->last_meal;
+		if (prog->phils[i]->born && time_passed > prog->time_to_die)
 		{
-			printf("\nPhil: %d\n DEAD\n", phils[i]->id);
-			phils[i]->alive = 0;
-			return (1);
+			printf("\nPhil: %d DEAD\n", prog->phils[i]->id);
+			prog->phils[i]->status = DEAD;
+			return (prog->phils[i]->id);
 		}
 	}
 	return (0);
@@ -55,10 +55,10 @@ void	*start_supervision(void *data)
 	prog = (t_prog *)data;
 	while (1)
 	{
-		died = all_alive(prog->phils, prog->n_phils, prog->time_to_die); 
+		usleep(5000);
+		died = all_alive(prog); 
 		if (died)
 		{
-			printf("Philosopher %d died!\n", died);
 			prog->running = 0;
 			break ;
 		}
@@ -70,7 +70,6 @@ void	*start_supervision(void *data)
 			prog->running = 0;
 			break ;
 		}
-		usleep(5000);
 	}
 	return (NULL);
 }

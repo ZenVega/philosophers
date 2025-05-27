@@ -35,20 +35,19 @@ typedef enum e_app_state {
 
 typedef struct s_phil {
 	int				id;
-	int				alive;
 	int				born;
 	t_action		status;
 	long			last_meal;
 	long			last_nap;
-	pthread_mutex_t	fork_1;
-	pthread_mutex_t	fork_2;
+	pthread_mutex_t	*fork_1;
+	pthread_mutex_t	*fork_2;
 	int				meals;
 }	t_phil;
 
 typedef struct s_prog {
 	int				n_phils;
 	pthread_t		*tids;
-	pthread_mutex_t	**forks;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	*init_lock;
 	long			start_time;
 	long			time_to_die;

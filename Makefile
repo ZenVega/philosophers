@@ -1,8 +1,8 @@
 SRC_FOLDER	= philo/
-NP = 60		#num_of_phils
+NP = 5		#num_of_phils
 NM = 30		#num_of_meals
 TE = 30		#time_to_eat
-TD = 65		#time_to_die
+TD = 70		#time_to_die
 TS = 30		#time_to_sleep
 
 CFILES		= \
@@ -20,9 +20,9 @@ DEPS		= \
 			  includes/constants.h
 CC			= gcc
 
-CFLAGS		= -g -Wall -Wextra -Werror -pthread 
+CFLAGS		= -g -Wall -Wextra -Werror -pthread
 
-SANITIZER = -fsanitize=address
+SANITIZER = -fsanitize=thread
 
 SANITIZER_OFF = 
 

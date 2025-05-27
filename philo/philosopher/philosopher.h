@@ -19,6 +19,6 @@
 # include <pthread.h>
 
 void	*create_phil(void *data);
-void	log_action(long start, int phil_id, t_action act_id);
+void	log_action(t_prog *prog, int phil_id, t_action act_id);
 
 #endif

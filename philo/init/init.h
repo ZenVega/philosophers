@@ -21,7 +21,7 @@
 
 int		init_threads(int n_phils, pthread_t **tid, t_prog *prog);
 int		init_prog(char **argv, t_prog *prog);
-int		init_forks(int n_phils, pthread_mutex_t ***forks,
+int		init_forks(int n_phils, pthread_mutex_t **forks,
 			pthread_mutex_t **init_lock);
 void	init_phils(t_prog *prog);
 

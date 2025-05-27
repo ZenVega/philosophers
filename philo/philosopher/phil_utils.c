@@ -12,15 +12,17 @@
 
 #include "philosopher.h"
 
-void	log_action(long start, int phil_id, t_action act_id)
+void	log_action(t_prog *prog, int phil_id, t_action act_id)
 {
-	char			*actions[6];
+	char			*actions[7];
 
 	actions[INIT] = "was born";
-	actions[FORK] = "has taken fork";
+	actions[FORK] = "has taken a fork";
 	actions[EAT] = "is eating";
 	actions[SLEEP] = "is sleeping";
 	actions[THINK] = "is thinking";
 	actions[DEAD] = "died";
-	printf("%ld %d %s\n", get_time() - start, phil_id + 1, actions[act_id]);
+	pthread_mutex_lock(prog->init_lock);
+	printf("%ld %d %s\n", get_time() - prog->start_time, phil_id, actions[act_id]);
+	pthread_mutex_unlock(prog->init_lock);
 }

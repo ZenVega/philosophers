@@ -48,21 +48,25 @@ void	clean_up(t_prog prog, t_app_state state)
 {
 	int	i;
 
-	i = 0;
 	if (state < PROG_INIT)
 		return ;
 	free(prog.tids);
 	if (state < THREAD_INIT)
 		return ;
+	i = 0;
 	while (i < prog.n_phils)
 		free(prog.phils[i++]);
 	free(prog.phils);
 	i = 0;
+	pthread_exit(NULL);
+}
+
+void	clean_mutexes(t_prog prog)
+{
+	int	i;
+
 	while (i < prog.n_phils)
-	{
-		pthread_mutex_destroy(prog.forks[i]);
-		free(prog.forks[i++]);
-	}
+		pthread_mutex_destroy(&prog.forks[i++]);
 	free(prog.forks);
 	pthread_mutex_destroy(prog.init_lock);
 	free(prog.init_lock);
