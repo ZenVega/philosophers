@@ -24,7 +24,7 @@ static int	init(int argc, char **argv, t_prog *prog)
 	err = init_threads((*prog).n_phils, &(*prog).tids, prog);
 	if (err)
 		return (on_error(err, *prog, PROG_INIT));
-	err = init_forks((*prog).n_phils, &(*prog).forks, &(*prog).init_lock);
+	err = init_forks(prog);
 	if (err)
 		return (on_error(err, *prog, THREAD_INIT));
 	init_phils(prog);

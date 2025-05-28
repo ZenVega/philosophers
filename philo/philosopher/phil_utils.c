@@ -15,6 +15,7 @@
 void	log_action(t_prog *prog, int phil_id, t_action act_id)
 {
 	char			*actions[7];
+	int				running;
 
 	actions[INIT] = "was born";
 	actions[FORK] = "has taken a fork";
@@ -22,6 +23,9 @@ void	log_action(t_prog *prog, int phil_id, t_action act_id)
 	actions[SLEEP] = "is sleeping";
 	actions[THINK] = "is thinking";
 	actions[DEAD] = "died";
-	if (prog->running || act_id == DEAD)
+	pthread_mutex_lock(prog->dead_lock);
+	running = prog->running;
+	pthread_mutex_unlock(prog->dead_lock);
+	if (running || act_id == DEAD)
 		printf("%ld %d %s\n", get_time() - prog->start_time, phil_id, actions[act_id]);
 }

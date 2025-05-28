@@ -65,11 +65,14 @@ void	clean_mutexes(t_prog prog)
 {
 	int	i;
 
+	i = 0;
 	while (i < prog.n_phils)
 		pthread_mutex_destroy(&prog.forks[i++]);
 	free(prog.forks);
 	pthread_mutex_destroy(prog.init_lock);
 	free(prog.init_lock);
+	pthread_mutex_destroy(prog.dead_lock);
+	free(prog.dead_lock);
 	pthread_exit(NULL);
 }
 

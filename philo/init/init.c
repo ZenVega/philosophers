@@ -45,24 +45,28 @@ int	init_threads(int n_phils, pthread_t **tid, t_prog *prog)
 	return (0);
 }
 
-int	init_forks(int n_phils, pthread_mutex_t **forks,
-		pthread_mutex_t **init_lock)
+int	init_forks(t_prog *prog)
 {
 	int	i;
 
 	i = 0;
-	*forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * n_phils);
-	if (!(*forks))
+	prog->forks = (pthread_mutex_t *)malloc(
+			sizeof(pthread_mutex_t) * prog->n_phils);
+	if (!(prog->forks))
 		return (errno);
-	while (i < n_phils)
-		pthread_mutex_init(&(*forks)[i++], NULL);
-	*init_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!(*init_lock))
+	while (i < prog->n_phils)
+		pthread_mutex_init(&(prog->forks)[i++], NULL);
+	prog->init_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	prog->dead_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!(prog->init_lock) || !(prog->dead_lock))
 	{
-		free(forks);
+		free(prog->dead_lock);
+		free(prog->init_lock);
+		free(prog->forks);
 		return (errno);
 	}
-	pthread_mutex_init(*init_lock, NULL);
+	pthread_mutex_init(prog->init_lock, NULL);
+	pthread_mutex_init(prog->dead_lock, NULL);
 	return (0);
 }
 

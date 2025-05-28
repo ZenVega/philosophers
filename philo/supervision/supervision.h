@@ -15,6 +15,7 @@
 
 # include "../includes/constants.h"
 # include "../utils/utils.h"
+# include "../philosopher/philosopher.h"
 # include <stdio.h>
 # include <unistd.h>
 
