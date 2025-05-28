@@ -22,7 +22,6 @@ void	log_action(t_prog *prog, int phil_id, t_action act_id)
 	actions[SLEEP] = "is sleeping";
 	actions[THINK] = "is thinking";
 	actions[DEAD] = "died";
-	pthread_mutex_lock(prog->init_lock);
-	printf("%ld %d %s\n", get_time() - prog->start_time, phil_id, actions[act_id]);
-	pthread_mutex_unlock(prog->init_lock);
+	if (prog->running || act_id == DEAD)
+		printf("%ld %d %s\n", get_time() - prog->start_time, phil_id, actions[act_id]);
 }

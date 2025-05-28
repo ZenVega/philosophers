@@ -26,6 +26,8 @@ static void	grab_fork(t_phil *phil, t_prog *prog)
 		pthread_mutex_lock(phil->fork_1);
 		log_action(prog, phil->id, FORK);
 	}
+	if (phil->status == DEAD)
+		return ;
 	phil->status = EAT;
 	phil->meals++;
 	log_action(prog, phil->id, phil->status);
@@ -45,8 +47,12 @@ static void	finish_meal(t_phil *phil, t_prog *prog)
 
 static void	wake_up(t_phil *phil, t_prog *prog)
 {
+	long	time_sleep;
+
 	phil->status = THINK;
 	log_action(prog, phil->id, phil->status);
+	time_sleep = prog->time_to_die - (get_time() - phil->last_meal) - 20;
+	usleep(time_sleep * 1000);
 }
 
 void	*create_phil(void *data)
@@ -54,21 +60,20 @@ void	*create_phil(void *data)
 	t_prog		*prog;
 	t_phil		*phil;
 	int			id;
-	int			offset;
 
 	prog = (t_prog *)data;
 	pthread_mutex_lock(prog->init_lock);
 	phil = prog->phils[prog->phil_id++];
 	id = phil->id;
 	pthread_mutex_unlock(prog->init_lock);
-	offset = 0;
-	if (id % 2)
-		offset = prog->time_to_eat; 
-	usleep(offset * 1000);
-	printf("IDS %d / %d\n", id, phil->id);
 	phil->last_meal = get_time();
 	phil->last_nap = get_time();
 	phil->born = 1;
+	if (id % 2)
+	{
+		log_action(prog, phil->id, phil->status);
+		usleep(prog->time_to_eat * 1000);
+	}
 	while (prog->running && phil->status != DEAD)
 	{
 		if (phil->status == THINK)
@@ -80,6 +85,5 @@ void	*create_phil(void *data)
 	}
 	if (phil->status == DEAD)
 		log_action(prog, phil->id, phil->status);
-	printf("PHIL %d exit\n", phil->id);
 	return (NULL);
 }

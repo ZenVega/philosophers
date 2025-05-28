@@ -27,7 +27,7 @@ static int	all_alive(t_prog *prog)
 		{
 			printf("\nPhil: %d DEAD\n", prog->phils[i]->id);
 			prog->phils[i]->status = DEAD;
-			return (prog->phils[i]->id);
+			return (1);
 		}
 	}
 	return (0);
@@ -53,14 +53,14 @@ void	*start_supervision(void *data)
 	int		died;
 
 	prog = (t_prog *)data;
-	while (1)
+	while (prog->running == 1)
 	{
 		usleep(5000);
 		died = all_alive(prog); 
 		if (died)
 		{
 			prog->running = 0;
-			break ;
+			return (NULL);
 		}
 		if (prog->n_meals
 			&& &prog->phils[prog->n_phils - 1] != (NULL)
@@ -68,7 +68,7 @@ void	*start_supervision(void *data)
 		{
 			printf("Everyone had %d meals and lives\n", prog->n_meals);
 			prog->running = 0;
-			break ;
+			return (NULL);
 		}
 	}
 	return (NULL);

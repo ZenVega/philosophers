@@ -1,9 +1,9 @@
 SRC_FOLDER	= philo/
-NP = 5		#num_of_phils
+NP = 11		#num_of_phils
 NM = 30		#num_of_meals
-TE = 30		#time_to_eat
-TD = 70		#time_to_die
-TS = 30		#time_to_sleep
+TE = 200	#time_to_eat
+TD = 450		#time_to_die
+TS = 200		#time_to_sleep
 
 CFILES		= \
 			$(SRC_FOLDER)/main.c\
@@ -20,11 +20,9 @@ DEPS		= \
 			  includes/constants.h
 CC			= gcc
 
-CFLAGS		= -g -Wall -Wextra -Werror -pthread
-
 SANITIZER = -fsanitize=thread
 
-SANITIZER_OFF = 
+CFLAGS		= -g -Wall -Wextra -Werror -pthread $(_SANITIZER)
 
 VALGRIND_FLAGS= \
 				--track-origins=yes
@@ -36,10 +34,10 @@ NAME		= philo
 all: $(NAME) 
 
 $(NAME): $(OFILES)
-	$(CC) $(CFLAGS) $(SANITIZER_OFF) -o $(SRC_FOLDER)$(NAME) $(OFILES)
+	$(CC) $(CFLAGS) $(_SANITIZER) -o $(SRC_FOLDER)$(NAME) $(OFILES)
 
 %.o: %.c $(DEPS)
-	$(CC) $(CFLAGS) $(SANITIZER_OFF) -I/usr/include -g -c $< -o $@
+	$(CC) $(CFLAGS) $(_SANITIZER) -I/usr/include -g -c $< -o $@
 
 clean:
 	rm -f $(OFILES)
@@ -49,8 +47,11 @@ fclean:	clean
 	rm -f $(NAME)/$(NAME)
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
-test: $(NAME)
-	$(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)
+test_live: $(NAME)
+	$(SRC_FOLDER)$(NAME) 7 460 200 200 30
+
+test_die: $(NAME)
+	$(SRC_FOLDER)$(NAME) 7 360 200 200 30
 
 val_test: $(NAME)
 	valgrind $(VALGRIND_FLAGS) $(SRC_FOLDER)$(NAME) 5 220 100 100 5
