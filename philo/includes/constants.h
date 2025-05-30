@@ -41,6 +41,7 @@ typedef struct s_phil {
 	t_action		status;
 	long			last_meal;
 	long			last_nap;
+	pthread_mutex_t	*status_lock;
 	pthread_mutex_t	*fork_1;
 	pthread_mutex_t	*fork_2;
 	int				meals;
@@ -49,8 +50,10 @@ typedef struct s_phil {
 typedef struct s_prog {
 	int				n_phils;
 	pthread_t		*tids;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	**forks;
+	pthread_mutex_t	**status_locks;
 	pthread_mutex_t	*init_lock;
+	pthread_mutex_t	*print_lock;
 	pthread_mutex_t	*dead_lock;
 	long			start_time;
 	long			time_to_die;

@@ -12,10 +12,10 @@
 
 #include "philosopher.h"
 
+//think about al logging thread
 void	log_action(t_prog *prog, int phil_id, t_action act_id, long time)
 {
 	char			*actions[7];
-	int				running;
 
 	actions[INIT] = "was born";
 	actions[FORK] = "has taken a fork";
@@ -23,7 +23,7 @@ void	log_action(t_prog *prog, int phil_id, t_action act_id, long time)
 	actions[SLEEP] = "is sleeping";
 	actions[THINK] = "is thinking";
 	actions[DEAD] = "died";
-	running = prog->running;
-	if (running || act_id == DEAD)
-		printf("%ld %d %s\n", time - prog->start_time, phil_id, actions[act_id]);
+	pthread_mutex_lock(prog->print_lock);
+	printf("%ld %d %s\n", time - prog->start_time, phil_id, actions[act_id]);
+	pthread_mutex_unlock(prog->print_lock);
 }

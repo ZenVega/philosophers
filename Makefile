@@ -1,6 +1,6 @@
 SRC_FOLDER	= philo/
 NP = 11		#num_of_phils
-NM = 30		#num_of_meals
+NM = 30	#num_of_meals
 TE = 200	#time_to_eat
 TD = 450		#time_to_die
 TS = 100		#time_to_sleep
@@ -49,7 +49,7 @@ fclean:	clean
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test_live: $(NAME)
-	$(SRC_FOLDER)$(NAME) 7 600 200 100 30
+	$(SRC_FOLDER)$(NAME) 7 440 200 100 
 
 test_die: $(NAME)
 	$(SRC_FOLDER)$(NAME) 7 360 200 200 30
