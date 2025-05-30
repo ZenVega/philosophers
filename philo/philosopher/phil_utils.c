@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   phil_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 11:50:01 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/03/04 13:48:52 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/05/30 11:08:32 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-void	log_action(t_prog *prog, int phil_id, t_action act_id)
+void	log_action(t_prog *prog, int phil_id, t_action act_id, long time)
 {
 	char			*actions[7];
 	int				running;
@@ -23,9 +23,7 @@ void	log_action(t_prog *prog, int phil_id, t_action act_id)
 	actions[SLEEP] = "is sleeping";
 	actions[THINK] = "is thinking";
 	actions[DEAD] = "died";
-	pthread_mutex_lock(prog->dead_lock);
 	running = prog->running;
-	pthread_mutex_unlock(prog->dead_lock);
 	if (running || act_id == DEAD)
-		printf("%ld %d %s\n", get_time() - prog->start_time, phil_id, actions[act_id]);
+		printf("%ld %d %s\n", time - prog->start_time, phil_id, actions[act_id]);
 }

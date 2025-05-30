@@ -8,6 +8,7 @@ TS = 100		#time_to_sleep
 CFILES		= \
 			$(SRC_FOLDER)/main.c\
 			$(SRC_FOLDER)/utils/utils.c\
+			$(SRC_FOLDER)/utils/utils_err.c\
 			$(SRC_FOLDER)/init/init.c\
 			$(SRC_FOLDER)/philosopher/philosopher.c\
 			$(SRC_FOLDER)/philosopher/phil_utils.c\

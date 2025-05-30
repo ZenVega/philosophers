@@ -6,7 +6,7 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:05:07 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/03/04 13:51:30 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/05/30 11:08:46 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHER_H
@@ -19,6 +19,6 @@
 # include <pthread.h>
 
 void	*create_phil(void *data);
-void	log_action(t_prog *prog, int phil_id, t_action act_id);
+void	log_action(t_prog *prog, int phil_id, t_action act_id, long time);
 
 #endif

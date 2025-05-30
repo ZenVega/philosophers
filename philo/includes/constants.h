@@ -6,7 +6,7 @@
 /*   By: uschmidt <uschmidt@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:09:46 by uschmidt          #+#    #+#             */
-/*   Updated: 2025/03/04 13:27:32 by uschmidt         ###   ########.fr       */
+/*   Updated: 2025/05/30 11:22:25 by uschmidt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CONSTANTS_H
 
 # include <pthread.h>
+
+typedef pthread_mutex_t	t_mutex;
 
 typedef enum e_action {
 	INIT = 0,
