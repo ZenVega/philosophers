@@ -29,6 +29,7 @@ VALGRIND_FLAGS= \
 				--track-origins=yes
 				--leak-check=full
 				--show-leak-kinds=all
+				--tool=helgrind
 
 NAME		= philo
 
@@ -49,13 +50,13 @@ fclean:	clean
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test_live: $(NAME)
-	$(SRC_FOLDER)$(NAME) 27 420 200 100 
+	$(SRC_FOLDER)$(NAME) 5 600 150 150
 
 test_die: $(NAME)
 	$(SRC_FOLDER)$(NAME) 7 360 200 200 30
 
 val_test: $(NAME)
-	valgrind $(VALGRIND_FLAGS) $(SRC_FOLDER)$(NAME) 5 220 100 100 5
+	valgrind $(VALGRIND_FLAGS) $(SRC_FOLDER)$(NAME) 5 820 200 100
 
 debug: $(NAME)
 	gdb --args $(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)

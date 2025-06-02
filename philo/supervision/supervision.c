@@ -12,13 +12,17 @@
 
 #include "supervision.h"
 
-static void	unlock_forks(t_prog *prog)
+static void	kill_phils(t_prog *prog)
 {
 	int		i;
 
-	i = 0;
-	while (i < prog->n_phils)
-		pthread_mutex_unlock(prog->forks[i++]);
+	i = -1;
+	while (++i < prog->n_phils)
+	{
+		pthread_mutex_lock(prog->phils[i]->status_lock);
+		prog->phils[i]->status = DEAD;
+		pthread_mutex_unlock(prog->phils[i]->status_lock);
+	}
 }
 
 static int	phil_died(t_prog *prog)
@@ -36,11 +40,8 @@ static int	phil_died(t_prog *prog)
 		{
 			prog->phils[i]->status = DEAD;
 			pthread_mutex_unlock(prog->phils[i]->status_lock);
-			pthread_mutex_lock(prog->dead_lock);
-			prog->running = 0;
-			pthread_mutex_unlock(prog->dead_lock);
 			log_action(prog, prog->phils[i]->id, DEAD, time);
-			unlock_forks(prog);
+			kill_phils(prog);
 			return (1);
 		}
 		pthread_mutex_unlock(prog->phils[i]->status_lock);
@@ -52,19 +53,20 @@ static int	dinner_done(t_prog *prog)
 {
 	int		i;
 
-	i = 0;
-	while (i < prog->n_phils)
+	i = -1;
+	while (++i < prog->n_phils)
 	{
 		pthread_mutex_lock(prog->phils[i]->status_lock);
 		if (prog->n_meals > prog->phils[i]->meals)
 		{
 			pthread_mutex_unlock(prog->phils[i]->status_lock);
-			return (1);
+			return (0);
 		}
 		pthread_mutex_unlock(prog->phils[i]->status_lock);
 	}
-	return (0);
+	return (1);
 }
+
 void	*start_supervision(void *data)
 {
 	t_prog	*prog;
@@ -74,12 +76,13 @@ void	*start_supervision(void *data)
 	{
 		if (phil_died(prog))
 			break ;
-		if (0 && prog->n_meals > 0 && dinner_done(prog))
+		if (prog->n_meals > 0 && dinner_done(prog))
 		{
 			printf("Dinner is done, %d meals eaten\n", prog->n_meals);
 			pthread_mutex_lock(prog->dead_lock);
 			prog->running = 0;
 			pthread_mutex_unlock(prog->dead_lock);
+			kill_phils(prog);
 			break ;
 		}
 	}
