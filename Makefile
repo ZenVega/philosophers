@@ -49,7 +49,7 @@ fclean:	clean
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test_live: $(NAME)
-	$(SRC_FOLDER)$(NAME) 7 440 200 100 
+	$(SRC_FOLDER)$(NAME) 27 420 200 100 
 
 test_die: $(NAME)
 	$(SRC_FOLDER)$(NAME) 7 360 200 200 30

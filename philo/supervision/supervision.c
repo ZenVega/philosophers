@@ -26,7 +26,6 @@ static int	phil_died(t_prog *prog)
 	int		i;
 	long	time;
 
-	//TODO: doesn't detect death accurately or logging is wrong??
 	i = -1;
 	while (++i < prog->n_phils)
 	{
@@ -75,9 +74,9 @@ void	*start_supervision(void *data)
 	{
 		if (phil_died(prog))
 			break ;
-		if (prog->n_meals > 0 && dinner_done(prog))
+		if (0 && prog->n_meals > 0 && dinner_done(prog))
 		{
-			printf("Dinner is done, %d meals eaten", prog->n_meals);
+			printf("Dinner is done, %d meals eaten\n", prog->n_meals);
 			pthread_mutex_lock(prog->dead_lock);
 			prog->running = 0;
 			pthread_mutex_unlock(prog->dead_lock);
