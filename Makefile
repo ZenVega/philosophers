@@ -29,6 +29,7 @@ VALGRIND_FLAGS= \
 				--track-origins=yes
 				--leak-check=full
 				--show-leak-kinds=all
+HELGRIND= \
 				--tool=helgrind
 
 NAME		= philo
@@ -56,7 +57,7 @@ test_die: $(NAME)
 	$(SRC_FOLDER)$(NAME) 7 360 200 200 30
 
 val_test: $(NAME)
-	valgrind $(VALGRIND_FLAGS) $(SRC_FOLDER)$(NAME) 5 820 200 100
+	valgrind $(HELGRIND) $(SRC_FOLDER)$(NAME) 5 1820 200 100
 
 debug: $(NAME)
 	gdb --args $(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)
