@@ -15,8 +15,6 @@
 int	init_prog(char **argv, t_prog *prog)
 {
 	prog->n_phils = ft_atoi(argv[1]);
-	//if (prog->n_phils < 2)
-	//	return (EINVAL);
 	prog->start_time = get_time();
 	prog->time_to_die = ft_atoi(argv[2]);
 	prog->time_to_eat = ft_atoi(argv[3]);

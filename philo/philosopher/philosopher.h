@@ -20,5 +20,7 @@
 
 void	*create_phil(void *data);
 void	log_action(t_prog *prog, int phil_id, t_action act_id, long time);
+int		is_dead(t_phil *phil);
+void	upadate_meal(t_phil *phil);
 
 #endif

@@ -58,18 +58,16 @@ static void	phil_sleep(t_prog *prog, t_phil *phil)
 
 static void	phil_think(t_prog *prog, t_phil *phil)
 {
-	//TODO: how to time thinking properly??
 	long	time_sleep;
 	long	time;
 
 	time = get_time();
 	log_action(prog, phil->id, THINK, time);
-	time_sleep = (prog->time_to_eat - prog->time_to_sleep);
-	time_sleep = 0;
+	pthread_mutex_lock(phil->status_lock);
+	time_sleep = (prog->time_to_die - (get_time() - phil->last_meal));
+	pthread_mutex_unlock(phil->status_lock);
 	if (time_sleep > 0)
-		usleep(time_sleep * 1000);
-	else if (time_sleep < 0)
-		usleep(-time_sleep * 1000);
+		usleep(time_sleep * 900);
 	else
 		usleep(1000);
 }
@@ -88,23 +86,17 @@ void	*create_phil(void *data)
 		log_action(prog, phil->id, THINK, get_time());
 		usleep(7000);
 	}
-	pthread_mutex_lock(phil->status_lock);
-	phil->last_meal = get_time();
-	pthread_mutex_unlock(phil->status_lock);
+	usleep(1000 * phil->id);
+	upadate_meal(phil);
 	while (1)
 	{
-		pthread_mutex_lock(phil->status_lock);
-		if (phil->status == DEAD)
+		if (is_dead(phil))
 			break ;
-		pthread_mutex_unlock(phil->status_lock);
 		phil_eat(prog, phil);
-		pthread_mutex_lock(phil->status_lock);
-		if (phil->status == DEAD)
+		if (is_dead(phil))
 			break ;
-		pthread_mutex_unlock(phil->status_lock);
 		phil_sleep(prog, phil);
 		phil_think(prog, phil);
 	}
-	pthread_mutex_unlock(phil->status_lock);
 	return (NULL);
 }

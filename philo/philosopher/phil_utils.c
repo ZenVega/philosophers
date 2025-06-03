@@ -27,3 +27,22 @@ void	log_action(t_prog *prog, int phil_id, t_action act_id, long time)
 	printf("%ld %d %s\n", time - prog->start_time, phil_id, actions[act_id]);
 	pthread_mutex_unlock(prog->print_lock);
 }
+
+int	is_dead(t_phil *phil)
+{
+	pthread_mutex_lock(phil->status_lock);
+	if (phil->status == DEAD)
+	{
+		pthread_mutex_unlock(phil->status_lock);
+		return (1);
+	}
+	pthread_mutex_unlock(phil->status_lock);
+	return (0);
+}
+
+void	upadate_meal(t_phil *phil)
+{
+	pthread_mutex_lock(phil->status_lock);
+	phil->last_meal = get_time();
+	pthread_mutex_unlock(phil->status_lock);
+}
