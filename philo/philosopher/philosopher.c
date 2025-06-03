@@ -16,9 +16,16 @@ static void	grab_forks(t_prog *prog, t_phil *phil,
 		pthread_mutex_t *fork_1, pthread_mutex_t *fork_2)
 {
 	pthread_mutex_lock(fork_1);
+	pthread_mutex_lock(phil->status_lock);
+	if (phil->status == DEAD)
+	{
+		pthread_mutex_unlock(phil->status_lock);
+		pthread_mutex_unlock(fork_1);
+		return ;
+	}
+	pthread_mutex_unlock(phil->status_lock);
 	log_action(prog, phil->id, FORK, get_time());
 	pthread_mutex_lock(fork_2);
-	log_action(prog, phil->id, FORK, get_time());
 }
 
 static void	phil_eat(t_prog *prog, t_phil *phil)
@@ -28,11 +35,17 @@ static void	phil_eat(t_prog *prog, t_phil *phil)
 	else
 		grab_forks(prog, phil, phil->fork_2, phil->fork_1);
 	pthread_mutex_lock(phil->status_lock);
-	phil->last_meal = get_time();
-	phil->meals++;
-	pthread_mutex_unlock(phil->status_lock);
-	log_action(prog, phil->id, EAT, phil->last_meal);
-	usleep(prog->time_to_eat * 1000);
+	if (phil->status != DEAD)
+	{
+		log_action(prog, phil->id, FORK, get_time());
+		phil->last_meal = get_time();
+		phil->meals++;
+		pthread_mutex_unlock(phil->status_lock);
+		log_action(prog, phil->id, EAT, phil->last_meal);
+		usleep(prog->time_to_eat * 1000);
+	}
+	else
+		pthread_mutex_unlock(phil->status_lock);
 	pthread_mutex_unlock(phil->fork_1);
 	pthread_mutex_unlock(phil->fork_2);
 }
@@ -85,6 +98,10 @@ void	*create_phil(void *data)
 			break ;
 		pthread_mutex_unlock(phil->status_lock);
 		phil_eat(prog, phil);
+		pthread_mutex_lock(phil->status_lock);
+		if (phil->status == DEAD)
+			break ;
+		pthread_mutex_unlock(phil->status_lock);
 		phil_sleep(prog, phil);
 		phil_think(prog, phil);
 	}

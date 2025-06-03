@@ -51,16 +51,16 @@ fclean:	clean
 
 # ./prog num_of_phils time_to_die time_to_eat time_to_sleep [each_must eat]
 test_live: $(NAME)
-	$(SRC_FOLDER)$(NAME) 5 600 150 150
+	$(SRC_FOLDER)$(NAME) 5 600 150 150 10
 
 test_die: $(NAME)
 	$(SRC_FOLDER)$(NAME) 7 360 200 200 30
 
 val_test: $(NAME)
-	valgrind $(HELGRIND) $(SRC_FOLDER)$(NAME) 5 1820 200 100
+	valgrind $(HELGRIND) $(SRC_FOLDER)$(NAME) 5 820 200 100
 
 debug: $(NAME)
-	gdb --args $(SRC_FOLDER)$(NAME) $(NP) $(TD) $(TE) $(TS) $(NM)
+	gdb --args $(SRC_FOLDER)$(NAME) 7 360 200 200 30
 
 re: fclean all
 

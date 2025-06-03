@@ -17,6 +17,8 @@ static void	kill_phils(t_prog *prog)
 	int		i;
 
 	i = -1;
+	if (prog->n_phils == 1)
+		pthread_mutex_unlock(prog->phils[0]->fork_1);
 	while (++i < prog->n_phils)
 	{
 		pthread_mutex_lock(prog->phils[i]->status_lock);
@@ -79,9 +81,6 @@ void	*start_supervision(void *data)
 		if (prog->n_meals > 0 && dinner_done(prog))
 		{
 			printf("Dinner is done, %d meals eaten\n", prog->n_meals);
-			pthread_mutex_lock(prog->dead_lock);
-			prog->running = 0;
-			pthread_mutex_unlock(prog->dead_lock);
 			kill_phils(prog);
 			break ;
 		}
