@@ -61,6 +61,8 @@ static void	phil_think(t_prog *prog, t_phil *phil)
 	long	time_sleep;
 	long	time;
 
+	if (is_dead(phil))
+		return ;
 	time = get_time();
 	log_action(prog, phil->id, THINK, time);
 	pthread_mutex_lock(phil->status_lock);
@@ -86,7 +88,7 @@ void	*create_phil(void *data)
 		log_action(prog, phil->id, THINK, get_time());
 		usleep(7000);
 	}
-	usleep(1000 * phil->id);
+	usleep(100 * phil->id);
 	upadate_meal(phil);
 	while (1)
 	{

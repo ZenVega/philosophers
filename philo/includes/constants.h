@@ -37,7 +37,6 @@ typedef enum e_app_state {
 
 typedef struct s_phil {
 	int				id;
-	int				born;
 	t_action		status;
 	long			last_meal;
 	long			last_nap;
@@ -50,11 +49,11 @@ typedef struct s_phil {
 typedef struct s_prog {
 	int				n_phils;
 	pthread_t		*tids;
+	pthread_t		super_id;
 	pthread_mutex_t	**forks;
 	pthread_mutex_t	**status_locks;
 	pthread_mutex_t	*init_lock;
 	pthread_mutex_t	*print_lock;
-	pthread_mutex_t	*dead_lock;
 	long			start_time;
 	long			time_to_die;
 	long			time_to_eat;
@@ -62,6 +61,6 @@ typedef struct s_prog {
 	int				n_meals;
 	int				phil_id;
 	t_phil			**phils;
-	int				running;
 }	t_prog;
+
 #endif

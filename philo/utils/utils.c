@@ -49,8 +49,6 @@ void	clean_up(t_prog prog, t_app_state state)
 	while (i < prog.n_phils)
 		free(prog.phils[i++]);
 	free(prog.phils);
-	i = 0;
-	pthread_exit(NULL);
 }
 
 void	clean_mutexes(t_prog prog)
@@ -62,18 +60,15 @@ void	clean_mutexes(t_prog prog)
 	{
 		pthread_mutex_destroy(prog.forks[i]);
 		free(prog.forks[i]);
-		pthread_mutex_destroy(prog.status_locks[i++]);
-		free(prog.status_locks[i]);
+		pthread_mutex_destroy(prog.status_locks[i]);
+		free(prog.status_locks[i++]);
 	}
 	free(prog.forks);
 	free(prog.status_locks);
 	pthread_mutex_destroy(prog.init_lock);
 	free(prog.init_lock);
-	pthread_mutex_destroy(prog.dead_lock);
-	free(prog.dead_lock);
 	pthread_mutex_destroy(prog.print_lock);
 	free(prog.print_lock);
-	pthread_exit(NULL);
 }
 
 //returns time in milliseconds

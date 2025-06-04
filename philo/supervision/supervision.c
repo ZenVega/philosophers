@@ -15,11 +15,15 @@
 static void	kill_phils(t_prog *prog)
 {
 	int		i;
+	int		phil_id;
 
 	i = -1;
+	pthread_mutex_lock(prog->init_lock);
+	phil_id = prog->phil_id;
+	pthread_mutex_unlock(prog->init_lock);
 	if (prog->n_phils == 1)
 		pthread_mutex_unlock(prog->phils[0]->fork_1);
-	while (++i < prog->n_phils)
+	while (++i < phil_id)
 	{
 		pthread_mutex_lock(prog->phils[i]->status_lock);
 		prog->phils[i]->status = DEAD;
@@ -30,10 +34,14 @@ static void	kill_phils(t_prog *prog)
 static int	phil_died(t_prog *prog)
 {
 	int		i;
+	int		phil_id;
 	long	time;
 
 	i = -1;
-	while (++i < prog->n_phils)
+	pthread_mutex_lock(prog->init_lock);
+	phil_id = prog->phil_id;
+	pthread_mutex_unlock(prog->init_lock);
+	while (++i < phil_id)
 	{
 		time = get_time();
 		pthread_mutex_lock(prog->phils[i]->status_lock);

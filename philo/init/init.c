@@ -20,12 +20,12 @@ int	init_prog(char **argv, t_prog *prog)
 	prog->time_to_eat = ft_atoi(argv[3]);
 	prog->time_to_sleep = ft_atoi(argv[4]);
 	prog->phil_id = 0;
-	prog->running = 1;
+	prog->tids = NULL;
+	prog->phils = NULL;
 	prog->init_lock = NULL;
 	prog->print_lock = NULL;
 	prog->status_locks = NULL;
 	prog->forks = NULL;
-	prog->dead_lock = NULL;
 	if (argv[5])
 		prog->n_meals = ft_atoi(argv[5]);
 	else
@@ -33,15 +33,15 @@ int	init_prog(char **argv, t_prog *prog)
 	return (0);
 }
 
-int	init_threads(int n_phils, pthread_t **tid, t_prog *prog)
+int	init_threads(int n_phils, t_prog *prog)
 {
-	*tid = (pthread_t *)malloc(sizeof(pthread_t) * n_phils);
-	if (!(*tid))
+	prog->tids = (pthread_t *)malloc(sizeof(pthread_t) * n_phils);
+	if (!(prog->tids))
 		return (errno);
 	prog->phils = (t_phil **)malloc(sizeof(t_phil *) * n_phils);
 	if (!(prog->phils))
 	{
-		free(*tid);
+		free(prog->tids);
 		return (errno);
 	}
 	return (0);
@@ -77,17 +77,15 @@ int	init_mutexes(t_prog *prog)
 	if (err)
 		return (err);
 	prog->init_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	prog->dead_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	prog->print_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!(prog->init_lock) || !(prog->dead_lock) || !(prog->print_lock))
+	if (!(prog->init_lock) || !(prog->print_lock))
 		return (errno);
 	pthread_mutex_init(prog->init_lock, NULL);
-	pthread_mutex_init(prog->dead_lock, NULL);
 	pthread_mutex_init(prog->print_lock, NULL);
 	return (0);
 }
 
-void	init_phils(t_prog *prog)
+int	init_phils(t_prog *prog)
 {
 	t_phil	*phil;
 	int		i;
@@ -96,17 +94,20 @@ void	init_phils(t_prog *prog)
 	while (i < prog->n_phils)
 	{
 		phil = (t_phil *)malloc(sizeof(t_phil));
+		if (!phil)
+			return (1);
 		phil->id = i;
 		phil->status = THINK;
 		phil->meals = 0;
+		phil->last_meal = 0;
 		phil->status_lock = prog->status_locks[phil->id];
 		phil->fork_1 = prog->forks[phil->id];
 		if (phil->id == prog->n_phils - 1)
 			phil->fork_2 = prog->forks[0];
 		else
 			phil->fork_2 = prog->forks[phil->id + 1];
-		phil->born = 0;
 		prog->phils[i] = phil;
 		i++;
 	}
+	return (0);
 }

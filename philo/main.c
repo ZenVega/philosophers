@@ -21,33 +21,36 @@ static int	init(int argc, char **argv, t_prog *prog)
 	err = init_prog(argv, prog);
 	if (err)
 		return (on_error(err, *prog, BEFORE_INIT));
-	err = init_threads((*prog).n_phils, &(*prog).tids, prog);
+	err = init_threads((*prog).n_phils, prog);
 	if (err)
 		return (on_error(err, *prog, PROG_INIT));
 	err = init_mutexes(prog);
 	if (err)
 		return (on_error(err, *prog, THREAD_INIT));
-	init_phils(prog);
+	err = init_phils(prog);
+	if (err)
+		return (on_error(err, *prog, THREAD_INIT));
 	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	static t_prog		prog;
-	int					i;
-	pthread_t			super_id;
+	t_prog	*prog;
+	int		i;
 
-	if (init(argc, argv, &prog))
-		return (-1);
+	prog = (t_prog *)malloc(sizeof(t_prog));
+	if (init(argc, argv, prog))
+		return (free(prog), 1);
 	i = 0;
-	while (i < prog.n_phils)
-		pthread_create(&prog.tids[i++], NULL, create_phil, &prog);
-	pthread_create(&super_id, NULL, start_supervision, &prog);
-	pthread_join(super_id, NULL);
+	while (i < prog->n_phils)
+		pthread_create(&(prog->tids[i++]), NULL, create_phil, prog);
+	pthread_create(&(prog->super_id), NULL, start_supervision, prog);
+	pthread_join(prog->super_id, NULL);
 	i = 0;
-	while (i < prog.n_phils)
-		pthread_join(prog.tids[i++], NULL);
-	clean_mutexes(prog);
-	clean_up(prog, SUPER_INIT);
-	return (0);
+	while (i < prog->n_phils)
+		pthread_join(prog->tids[i++], NULL);
+	clean_mutexes(*prog);
+	clean_up(*prog, SUPER_INIT);
+	free(prog);
+	return (i);
 }

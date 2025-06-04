@@ -19,9 +19,9 @@
 # include "../utils/utils.h"
 # include "../philosopher/philosopher.h"
 
-int		init_threads(int n_phils, pthread_t **tid, t_prog *prog);
+int		init_threads(int n_phils, t_prog *prog);
 int		init_prog(char **argv, t_prog *prog);
 int		init_mutexes(t_prog *prog);
-void	init_phils(t_prog *prog);
+int		init_phils(t_prog *prog);
 
 #endif

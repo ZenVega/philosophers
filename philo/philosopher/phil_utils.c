@@ -17,7 +17,6 @@ void	log_action(t_prog *prog, int phil_id, t_action act_id, long time)
 {
 	char			*actions[7];
 
-	actions[INIT] = "was born";
 	actions[FORK] = "has taken a fork";
 	actions[EAT] = "is eating";
 	actions[SLEEP] = "is sleeping";

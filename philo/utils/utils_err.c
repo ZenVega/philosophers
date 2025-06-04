@@ -15,6 +15,8 @@
 int	on_error(int err, t_prog prog, t_app_state state)
 {
 	errno = err;
+	if (state == SUPER_INIT)
+		clean_mutexes(prog);
 	clean_up(prog, state);
 	printf("Error: %s\n", strerror(errno));
 	return (errno);

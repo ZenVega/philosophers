@@ -26,11 +26,12 @@ _SANITIZER = -fsanitize=thread
 CFLAGS		= -g -Wall -Wextra -Werror -pthread $(SANITIZER)
 
 VALGRIND_FLAGS= \
-				--track-origins=yes
-				--leak-check=full
-				--show-leak-kinds=all
+				--track-origins=yes\
+				--leak-check=full\
+				--show-leak-kinds=all\
+
 HELGRIND= \
-				--tool=helgrind
+				--tool=helgrind\
 
 NAME		= philo
 
@@ -57,7 +58,7 @@ test_die: $(NAME)
 	$(SRC_FOLDER)$(NAME) 7 360 200 200 30
 
 val_test: $(NAME)
-	valgrind $(HELGRIND) $(SRC_FOLDER)$(NAME) 5 820 200 100
+	valgrind $(_VALGRIND_FLAGS) $(_HELGRIND) $(SRC_FOLDER)$(NAME) 3 820 200 100
 
 debug: $(NAME)
 	gdb --args $(SRC_FOLDER)$(NAME) 7 360 200 200 30
