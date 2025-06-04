@@ -21,7 +21,7 @@ DEPS		= \
 			  includes/constants.h
 CC			= gcc
 
-_SANITIZER = -fsanitize=thread
+SANITIZER = -fsanitize=thread
 
 CFLAGS		= -g -Wall -Wextra -Werror -pthread $(SANITIZER)
 
